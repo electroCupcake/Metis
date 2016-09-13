@@ -1,0 +1,11 @@
+//compiler
+movingSquare
+*.exe
+*.EXE
+*.cpe
+*.sym
+*.map
+//eclipse
+.cproject
+.project
+.settings
