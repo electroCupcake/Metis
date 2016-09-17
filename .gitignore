@@ -10,6 +10,7 @@ movingSquare
 *.cpe
 *.sym
 *.map
+build*
 //eclipse
 .cproject
 .project
