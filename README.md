@@ -30,8 +30,8 @@ PlayStation (KUBUNTU 14.04)
 	
 Linux (KUBUNTU 14.04)
 
-        CMAKE
 	GLEW (repository)
+	CMAKE
 	GLFW v3.2.1 (download and compile from source)
 	BUILD_ESSENTIALS
 	
