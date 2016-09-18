@@ -25,7 +25,7 @@ PlayStation (KUBUNTU 14.04)
 
 	Psy-Q SDK from psxdev.net, with updated CPE2X from forums
 	WINE
-        CMAKE
+	CMAKE
 	BUILD_ESSENTIALS
 	
 Linux (KUBUNTU 14.04)
@@ -69,10 +69,17 @@ Linux using GLFW
         3. Install other dependcies via your package manager, or download, compile and install.
 	
 ### Build Instructions
-        1st:
-                cmake . = Generate make file for system.
-                cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/psx.cmake = Generate makefile for the PlayStation using its tool chain. Will work in Linux and Windows(NOT TESTED).
+        1st: 
+                -Generate make file for system.
+                cmake .
+                
+                OR
+                
+                -Generate makefile for the PlayStation using its tool chain. Will work in Linux and Windows(NOT TESTED).
+                cmake . -DCMAKE_TOOLCHAIN_FILE=toolchain/psx.cmake 
+                
         2nd:
-                make = Build using toolchain specified, will generate executable into a bin_(arch) directory.
+                -Build using toolchain specified, will generate executable into a bin_(arch) directory.
+                make
 
 
