@@ -27,11 +27,11 @@ if(PSX)
         file(GLOB PSX_SRC "src/psx/*.c")
         list(APPEND SOURCES ${PSX_SRC})
         
-        message(STATUS ${CMAKE_BINARY_DIR})
-        
         add_executable(${MAIN}.cpe ${SOURCES})
         
-        #add_custom_command(TARGET ${MAIN}.cpe POST_BUILD COMMAND "konsole -e echo 'D:\r cd "${CMAKE_BINARY_DIR}/bin_psx"\r CPE2X.EXE ${MAIN}.cpe\r exitemu\r' | dosemu -dumb")
+        set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${MAIN}.exe)
+        
+        add_custom_command(TARGET ${MAIN}.cpe POST_BUILD COMMAND CPE2XWIN.EXE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${MAIN}.cpe)
         
 elseif(WIN32 OR MINGW OR MSYS OR CYGWIN OR MSVC)
         message(STATUS "WINDOWS BUILD")
