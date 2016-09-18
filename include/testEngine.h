@@ -5,10 +5,10 @@
  *      Author: John Convertino
  *		email: electrobs@gmail.com
  *		
- *		DESCRIPTION
+ *		Common header for all archs, use typedef to change included librarys.
  *
- *		Version: ADD_HERE
- *		Sep 17, 2016 *VERSION*	*NOTES*
+ *		Version: v0.1
+ *		Sep 17, 2016 v0.1	First split
  *
  *		TODO
  */

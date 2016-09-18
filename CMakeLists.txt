@@ -61,8 +61,6 @@ else()
         message(FATAL_ERROR "NO BUILD TARGET MATCH")
 endif()
 
-message(STATUS ${PSX})
-
 if(PSX)
         message(STATUS "LINKING PSX LIBS")
         target_compile_options(${MAIN}.cpe PUBLIC -O3 -Dpsx)

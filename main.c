@@ -11,8 +11,9 @@
  *		or via how ever the pcsx emulator is mapped for d-pad directions
  *		and the x(cross) button (color change).
  *
- *		Version: 0.1
- *		Sep 5, 2016 0.1	First version
+ *		Version: 0.2
+ *              Sep 18, 2016 0.2        Split into seprate files for cmake tests.
+ *		Sep 5, 2016  0.1	First version
  *
  *		TODO
  */

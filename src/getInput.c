@@ -5,10 +5,10 @@
  *      Author: John Convertino
  *		email: electrobs@gmail.com
  *		
- *		DESCRIPTION
+ *		Common Code for all arch
  *
- *		Version: ADD_HERE
- *		Sep 17, 2016 *VERSION*	*NOTES*
+ *		Version: v0.1
+ *		Sep 17, 2016 v0.1	First Split
  *
  *		TODO
  */
