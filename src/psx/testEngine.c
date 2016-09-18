@@ -170,7 +170,7 @@ void cleanup(void *window)
 }
 
 //check if the window is still open, since the PSX does not have a window, it returns a 1 to run infinitely
-int displayLive(void *window)
+int displayAlive(void *window)
 {
   return 1;
 }
