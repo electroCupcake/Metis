@@ -15,6 +15,8 @@
 
 #include "testEngine.h"
 
+enum inputTypes g_decodedInput = NONE;
+
 //get the input and reset it to NONE
 enum inputTypes getInput()
 {

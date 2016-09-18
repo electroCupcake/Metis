@@ -4,13 +4,13 @@ cmake_install.cmake
 CMakeCache.txt
 Makefile
 //compiler
-movingSquare
+movsqr
 *.exe
 *.EXE
 *.cpe
 *.sym
 *.map
-build*
+bin*
 //eclipse
 .cproject
 .project

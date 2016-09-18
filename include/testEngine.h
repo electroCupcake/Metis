@@ -61,7 +61,7 @@ struct s_polyF4 {
 
 //to help translate input into a common type
 enum inputTypes {UP, DOWN, LEFT, RIGHT, CHANGE_COLOR, NONE};
-enum inputTypes g_decodedInput = NONE;
+extern enum inputTypes g_decodedInput;
 
 //prototypes
 //initializes graphics

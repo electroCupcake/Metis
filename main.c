@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
   polyF4 = genPrimitive();
 
-  while(displayLive(window))
+  while(displayAlive(window))
   {
     movePrimitive(&polyF4, getInput());
     display(window, &polyF4);
