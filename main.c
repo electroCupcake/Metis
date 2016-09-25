@@ -4,7 +4,7 @@
  *  Created on: Sep 5, 2016
  *      Author: John Convertino
  *		email: electrobs@gmail.com
- *		
+ *
  *		Linux and PlayStation cross platform test application.
  *		This application is just a square that can move either via
  *		keyboard in linux (UP, DOWN, LEFT, RIGHT, x for color change)
