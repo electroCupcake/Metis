@@ -16,3 +16,6 @@ bin*
 .project
 .settings
 .directory
+//codeblocks
+movsqr.cbp
+movsqr.layout
