@@ -17,5 +17,5 @@ bin*
 .settings
 .directory
 //codeblocks
-movsqr.cbp
-movsqr.layout
+*.cbp
+*.layout

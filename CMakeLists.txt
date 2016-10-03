@@ -12,7 +12,7 @@ file(GLOB GLB_SRC "src/*.c")
 list(APPEND SOURCES ${GLB_SRC})
 
 #set global exe name
-set(MAIN "movsqr")
+set(MAIN "MAIN")
 
 project(${MAIN})
 
