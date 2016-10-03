@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 
+#set global exe name
+set(MAIN "movsqr")
+
+project(${MAIN})
 #include directory, same for all build types
 include_directories(include)
 
@@ -10,11 +14,6 @@ file(GLOB SOURCES "main.c")
 #add global sources
 file(GLOB GLB_SRC "src/*.c")
 list(APPEND SOURCES ${GLB_SRC})
-
-#set global exe name
-set(MAIN "movsqr")
-
-project(${MAIN})
 
 #include sources that are platform specific
 if(PSX)

@@ -27,4 +27,4 @@ $(CPE): $(PSX_OBJECTS)
 	$(PSX_CC) $< $(PSX_CFLAGS) -o $@
 
 clean:
-	rm -f $(EXEC) $(PSX_EXEC) $(CPE) $(SYM) $(MAP) $(OBJECTS) $(PSX_OBJECTS)E) $(SYM) $(MAP) $(OBJECTS) $(PSX_OBJECTS)
+	rm -f $(EXEC) $(PSX_EXEC) $(CPE) $(SYM) $(MAP) $(OBJECTS) $(PSX_OBJECTS) $(SYM) $(MAP) $(OBJECTS) $(PSX_OBJECTS)

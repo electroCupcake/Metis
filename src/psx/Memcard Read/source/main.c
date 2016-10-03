@@ -65,9 +65,6 @@ short CurrentBuffer = 0;
 void graphics();
 void display();
 
-const DEBUG = 1; // debugging 
-
-
 int main() 
 {
 	long cmds;
@@ -76,10 +73,6 @@ int main()
 	graphics(); // setup the graphics (seen below)
 	FntLoad(960, 256); // load the font from the BIOS into VRAM/SGRAM
 	SetDumpFnt(FntOpen(5, 20, 320, 240, 0, 512)); // screen X,Y | max text length X,Y | autmatic background clear 0,1 | max characters
-
-	// should debug = 1 (as seen above), print to the debug window (should you be using one)
-	if (DEBUG) printf("\n\nHello World\n");
-	if (DEBUG) printf("\nhttp://psxdev.net/");
 	  
 	MemCardInit(1);
 	
@@ -87,29 +80,29 @@ int main()
 	
 	if(MemCardSync(0, &cmds, &result) <= 0)
 	{
-	  FntPrint("START WTF\n\n");
+	  printf("\nSync Start Issue\n");
 	}
 	
 	MemCardAccept(0);
 	
 	if(MemCardSync(0, &cmds, &result) <= 0)
 	{
-	  FntPrint("ACCEPT WTF\n\n");
+	  printf("\nSync Accept Issue\n");
 	}
 	
-	if(MemCardOpen(0, "test", O_WRONLY) != 0)
+	if(MemCardOpen(0, "test", O_RDONLY) != 0)
 	{
-	  FntPrint("Open WTF\n\n");
+	  printf("\nOpen Issue\n");
 	}
 	
 	if(MemCardReadData((unsigned long *)(&phrase[0]), 0, 128)  != 0)
 	{
-	  FntPrint("Write WTF\n\n");
+	  printf("\nRead Issue\n");
 	}
 	
 	if(MemCardSync(0, &cmds, &result) <= 0)
 	{
-	  FntPrint("WRITE WTF\n\n");
+	  printf("\nRead Sync Issue\n");
 	}
 	
 	MemCardClose();
