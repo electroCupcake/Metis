@@ -237,3 +237,90 @@ while (1) {
 * MemCardSync(), Sync memory card access by waiting for termination of asynchronous functions calls.
 * MemCardWriteData(), Writes data to a file setup by open, to the memory card in 128 byte chunks (bytes must be a multiple of 128).
 * MemCardWriteFile(), Write data to a specified memory card file. Same byte requirement as above.
+
+#### Writing to a Memory Card
+
+```
+MemCardInit(1);
+	
+MemCardStart();
+
+if(MemCardSync(0, &cmds, &result) <= 0)
+{
+  FntPrint("START WTF\n\n");
+}
+
+MemCardAccept(0);
+
+if(MemCardSync(0, &cmds, &result) <= 0)
+{
+  FntPrint("ACCEPT WTF\n\n");
+}
+
+if(MemCardCreateFile(0, "test", 1) != 0)
+{
+  FntPrint("FILE CREATE WTF\n\n");
+}
+
+if(MemCardOpen(0, "test", O_WRONLY) != 0)
+{
+  FntPrint("Open WTF\n\n");
+}
+
+if(MemCardWriteData((unsigned long *)&(*phrase), 0, 128)  != 0)
+{
+  FntPrint("Write WTF\n\n");
+}
+
+if(MemCardSync(0, &cmds, &result) <= 0)
+{
+  FntPrint("WRITE WTF\n\n");
+}
+
+MemCardClose();
+
+MemCardStop();
+```
+
+#### Reading from a Memory Card
+```
+MemCardInit(1);
+
+MemCardStart();
+
+if(MemCardSync(0, &cmds, &result) <= 0)
+{
+  FntPrint("START WTF\n\n");
+}
+
+MemCardAccept(0);
+
+if(MemCardSync(0, &cmds, &result) <= 0)
+{
+  FntPrint("ACCEPT WTF\n\n");
+}
+
+if(MemCardCreateFile(0, "test", 1) != 0)
+{
+  FntPrint("FILE CREATE WTF\n\n");
+}
+
+if(MemCardOpen(0, "test", O_WRONLY) != 0)
+{
+  FntPrint("Open WTF\n\n");
+}
+
+if(MemCardWriteData((unsigned long *)&(*phrase), 0, 128)  != 0)
+{
+  FntPrint("Write WTF\n\n");
+}
+
+if(MemCardSync(0, &cmds, &result) <= 0)
+{
+  FntPrint("WRITE WTF\n\n");
+}
+
+MemCardClose();
+
+MemCardStop();
+```
