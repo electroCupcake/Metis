@@ -27,11 +27,27 @@
 
 ##### Functions
 
-* LoadImage(), transfer data to a frame buffer from memory.
+* LoadImage(), transfer data to the frame buffer from memory.
 * MoveImage(), transfer data between two places in the frame buffer.
 * StoreImage(), transer data from frame buffer to memory.
 * GetTpage(), calculates texture page ID and returns it for use.
 * GetClut(), use to process color lookup table.
+* LoadTPage(), transfer data to the frame buffer from memory. Returns the ID of the texture.
+* LoadClut(), transfer CLUT to the frame buffer from memroy. Returns the ID of the clut.
+* GsGetTimInfo(), load TIM info from a image in a buffer, this info is put into a GsIMAGE struct.
+
+##### Notes
+* When loading offset the pointer by 32 bits (4 bytes) this information is not used by the GsGetTimInfo() function.
+
+#### Creating a texture
+
+1. Create a 24 bit bitmap no bigger than 256x256 (look above at texture mapping for pixel formats).
+2. Start TIMUTIL.EXE in PSYQ.
+3. Open bitmap with TIMUTIL.EXE.
+4. Set dialog to 4,8, or 16 bit CLUT.
+5. Set X, Y position, this sets where in memory the texture exists (set outside the display buffer).
+6. Press Convert button, will export bitmap as a TIM (prompts for directory).
+7. Open with TIMTOOL.EXE to verify texture.
 
 ### Example Code
 
@@ -41,7 +57,6 @@
 DslFILE fileInfo;
 int sizeSectors = 0;
 
-	
 u_long *image = NULL;
 
 //CD init 
@@ -92,10 +107,11 @@ printf("\nREAD COMPLETE\n");
 DsClose();
 ```
 
-##### Loading a TIM image already in memory.
+##### Loading a TIM image in memory.
 
 ```
 POLY_FT4 f4;
+GsIMAGE g_timData;
 
 //setup textured primitive
 SetPolyFT4(&f4);
