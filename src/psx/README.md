@@ -1,8 +1,8 @@
 # README
 
-## Toolkit: PSYQ
+### Toolkit: PSYQ
 
-## This Setup Assumes Linux using WINE, will also work with Windows XP setup per [psxdev.net instructions](http://www.psxdev.net/help/psyq_install.html).
+### This setup assumes Linux using WINE, this will also work with Windows XP setup per [psxdev.net instructions](http://www.psxdev.net/help/psyq_install.html).
 
 This directory contains example code for the PlayStation. Ordering tables are avoided in examples to keep them simple.
 
@@ -15,6 +15,42 @@ Toolkit is PSYQ, available at [psxdev.net](http://www.psxdev.net/downloads.html)
 * psxGraphics.md   = Graphics Info
 * psxMemCard.md    = Memory Card Usage
 * psxTextures.md   = Texture Loading
+
+### Requirements
+
+PlayStation (WINDOWS XP SP3)
+
+	Psy-Q SDK from psxdev.net
+	MinGW
+	
+PlayStation (KUBUNTU 14.04)
+
+	Psy-Q SDK from psxdev.net
+	WINE
+	dosemu
+	BUILD_ESSENTIALS
+
+### Library Install Directions
+
+#### DOWNLOAD LINKS
+   1. [PlayStation Dev Kit ... psxdev.net](http://www.psxdev.net/downloads.html)
+
+   2. [Windows Reg File for PlayStation Dev Kit ... psxdev.net/forum](http://www.psxdev.net/forum/viewtopic.php?f=49&t=206)
+
+Linux using WINE
+
+        1. Install WINE
+        2. Install dosemu 
+        3. Initialize WINE (winecfg works well for this)
+        4. Initialize dosemu (just run dosemu)
+        5. Copy psyq directory to wine drive_c directory
+        6. Use the command "wine regedit" to import reg file
+        7. Edit dosemu's autoexec.bat and alter the file to mount your linux drive as root for drive D:.
+           Then add psyq folder in wine as a path.
+        8. Install pcsx
+        9. Execute pcsx
+        10. Add a bios file to pcsx
+        11. Tell pcsx to use the file
 
 ## Basic Tool Setup
 
