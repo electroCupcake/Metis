@@ -1,14 +1,14 @@
 # README
 
-### Toolkit: PSYQ
+#### Toolkit: PSYQ
 
-### This setup assumes Linux using WINE, this will also work with Windows XP setup per [psxdev.net instructions](http://www.psxdev.net/help/psyq_install.html).
+#### This setup assumes Linux using WINE, this will also work with Windows XP setup per [psxdev.net instructions](http://www.psxdev.net/help/psyq_install.html).
 
 This directory contains example code for the PlayStation. Ordering tables are avoided in examples to keep them simple.
 
 Toolkit is PSYQ, available at [psxdev.net](http://www.psxdev.net/downloads.html).
 
-## Files
+### Files
 
 * psxCDcreate.md   = Create a ISO image
 * psxController.md = Access Controller
@@ -16,7 +16,7 @@ Toolkit is PSYQ, available at [psxdev.net](http://www.psxdev.net/downloads.html)
 * psxMemCard.md    = Memory Card Usage
 * psxTextures.md   = Texture Loading
 
-### Requirements
+#### Requirements
 
 PlayStation (WINDOWS XP SP3)
 
@@ -52,9 +52,9 @@ Linux using WINE
         10. Add a bios file to pcsx
         11. Tell pcsx to use the file
 
-## Basic Tool Setup
+### Basic Tool Setup
 
-### ${YOUR_USERNAME} should be replace with your user name.
+#### ${YOUR_USERNAME} should be replace with your user name.
 
 #### .bashrc
 ```
@@ -91,5 +91,5 @@ unix -e
 
 ```
 
-## Notes
+### Notes
 * Make sure to mark all PSYQ executables as executable (chmod +x *.EXE).
