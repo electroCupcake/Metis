@@ -80,14 +80,14 @@ int main()
 	
 	if(MemCardSync(0, &cmds, &result) <= 0)
 	{
-	  printf("\nSync Start Issue\n");
+	  printf("\nSync Failed\n");
 	}
 	
 	MemCardAccept(0);
 	
 	if(MemCardSync(0, &cmds, &result) <= 0)
 	{
-	  printf("\nSync Accept Issue\n");
+	  printf("\nSync Failed\n");
 	}
 	
 	if(MemCardOpen(0, "test", O_RDONLY) != 0)
@@ -102,9 +102,9 @@ int main()
 	
 	if(MemCardSync(0, &cmds, &result) <= 0)
 	{
-	  printf("\nRead Sync Issue\n");
+	  printf("\nSync Failed\n");
 	}
-	
+
 	MemCardClose();
 	
 	MemCardStop();
