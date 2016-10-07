@@ -4,28 +4,7 @@
 
 #### Library: libgs.h, libgpu.h, libgte.h
 
-Basic code stubs to deal with graphics
-```
-switch(*(char *)0xbfc7ff52=='E')
-{
-  case 'E':
-    SetVideoMode(1); 
-    break;
-  default:
-    SetVideoMode(0); 
-    break;	
-}
-
-GsInitGraph(SCREEN_WIDTH, SCREEN_HEIGHT, GsINTER|GsOFSGPU, 1, 0);
-GsDefDispBuff(0, 0, 0, SCREEN_HEIGHT);
-
-//functions to call to update display
-GsClearDispArea(0,0,0);
-DrawPrim(f4);
-DrawSync(0); // wait for all drawing to finish
-VSync(0); // wait for v_blank interrupt
-GsSwapDispBuff(); // flip the double buffers
-```
+#### Example: controller, textureTest, textureTestCD
 
 #### To setup graphics:
 
@@ -57,19 +36,6 @@ GsSwapDispBuff(); // flip the double buffers
 * PutDrawEnv() to make a draw environment current.
 * GetDrawEnv() gets a pointer to the current drawing environment.
 
-#### Code for switching between double buffers.
-```
-DRAWENV drawenv[2]; 	 	/*drawing environments*/
-DISPENV dispenv[2];			/*display environments*/
-int dispid = 0;    	 		/*display buffer ID*/
-while (1) {
-  VSync(0);			        /*wait for vertical blank*/
-  dispid = (dispid + 1) %2;	/*toggle buffer ID between 0 and 1*/
-  PutDrawEnv(&drawenv[dispid]);	/*switch drawing environment*/
-  PutDispEnv(&dispenv[dispid]);	/*switch display environment*/
-}
-```
-
 #### Sync and Reset:
 
 * ResetGraph() resets the graphics system.
@@ -96,4 +62,40 @@ while (1) {
 
 * Check for bottleneck at CPU or GPU
 * DrawSync(), immediate return, bottleneck at CPU, else at GPU (measure latency of GPU).
+
+### Examples
+##### Basic code stubs to deal with graphics
+```
+switch(*(char *)0xbfc7ff52=='E')
+{
+  case 'E':
+    SetVideoMode(1); 
+    break;
+  default:
+    SetVideoMode(0); 
+    break;	
+}
+
+GsInitGraph(SCREEN_WIDTH, SCREEN_HEIGHT, GsINTER|GsOFSGPU, 1, 0);
+GsDefDispBuff(0, 0, 0, SCREEN_HEIGHT);
+
+//functions to call to update display
+GsClearDispArea(0,0,0);
+DrawPrim(f4);
+DrawSync(0); // wait for all drawing to finish
+VSync(0); // wait for v_blank interrupt
+GsSwapDispBuff(); // flip the double buffers
+```
+##### Code for switching between double buffers.
+```
+DRAWENV drawenv[2]; 	 	/*drawing environments*/
+DISPENV dispenv[2];			/*display environments*/
+int dispid = 0;    	 		/*display buffer ID*/
+while (1) {
+  VSync(0);			        /*wait for vertical blank*/
+  dispid = (dispid + 1) %2;	/*toggle buffer ID between 0 and 1*/
+  PutDrawEnv(&drawenv[dispid]);	/*switch drawing environment*/
+  PutDispEnv(&dispenv[dispid]);	/*switch display environment*/
+}
+```
  
