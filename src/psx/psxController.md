@@ -3,6 +3,7 @@
 #### Library: libpad.h
 #### Example: controller
 
+### Data Structure
 Below is the way data is stored for the controller using PadInitDirect().
 
 ```css

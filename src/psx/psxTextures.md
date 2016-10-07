@@ -49,8 +49,7 @@
 6. Press Convert button, will export bitmap as a TIM (prompts for directory).
 7. Open with TIMTOOL.EXE to verify texture.
 
-### Example Code
-
+### Example
 
 ##### Loading TIM from CD
 ```

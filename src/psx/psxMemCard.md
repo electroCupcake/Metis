@@ -1,10 +1,8 @@
 #PSX Memory Card Notes
 
-#### Library: libcard.h
-
 #### Example: memcardReader, memcardWrite
 
-#### Specifications
+### Specifications
 
 * Capacity, 120 Kbytes in 128-byte sectors
 * Synchronous serial communication
@@ -12,7 +10,11 @@
 * Max continuous reading speed is 10 Kbyte/sec
 * basic library, low level library.
 
-##### Functions
+### Base Memory Card Library
+
+#### Library: libcard.h
+
+#### Functions
 
 * InitCARD(), Initializes the memory card bios and enters idle state. Can set if shared with controller or not.
 * StartCARD(), Changes memory Card BIOS to run state (initCARD must be called first!).
@@ -24,7 +26,7 @@
 * _card_read(), read one block from the memory card (128 bytes, one sector), at a specified port.
 * _card_write(), same as above, except it writes a block.
 
-#### EXTENDED Memory Card Library
+### EXTENDED Memory Card Library
 
 #### Library: libmcrd.h
 
@@ -54,6 +56,8 @@
 * MemCardSync(), Sync memory card access by waiting for termination of asynchronous functions calls.
 * MemCardWriteData(), Writes data to a file setup by open, to the memory card in 128 byte chunks (bytes must be a multiple of 128).
 * MemCardWriteFile(), Write data to a specified memory card file. Same byte requirement as above.
+
+### Example
 
 #### Writing to a Memory Card
 

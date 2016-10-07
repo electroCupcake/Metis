@@ -1,19 +1,19 @@
 # PSX CD Creation
 
-## Example: textureTestCD
+### Example: textureTestCD
 
-## Sources: [stripiso.exe](http://www.psxdev.net/forum/viewtopic.php?f=60&t=997), [PSXLICENSE.exe](http://www.psxdev.net/forum/viewtopic.php?f=69&t=704)
+### Sources: [stripiso.exe](http://www.psxdev.net/forum/viewtopic.php?f=60&t=997), [PSXLICENSE.exe](http://www.psxdev.net/forum/viewtopic.php?f=69&t=704)
 
-### Tools
+## Tools
 * BUILDCD.EXE = Builds a ISO image based on the CTI file, must be short paths due to it being a DOS program.
 * stripiso.exe = You can use the stripiso.exe included with PSYQ or the one downloaded in the sources, I rename the download "stripisowin.exe" to avoid confusion with the DOS version.
 * PSXLICENSE.EXE = Licenses a ISO so it can boot with an emulator (will not boot on a regular PSX without a modchip).
 
-### Files
+## Files
 * *.CTI = Listing of files and how to layout the disc.
 * *.CNF = Basic config info for the disc.
 
-### Example Files
+## Example Files
 #### System CNF
 ```
 BOOT=cdrom:\MAIN.EXE;1

@@ -4,6 +4,8 @@
 
 #### Example: controller, textureTest, textureTestCD
 
+### Using Extended Graphics Libarary
+
 #### To setup graphics:
 
 * Check if memory address is equal to character E, if its E, set video mode to PAL, otherwise, NTSC.
@@ -20,7 +22,7 @@
 * VSynch() wait for v_blank interrupt
 * GsSwapDispBuff() flips the double buffers.
 
-### Without using extended graphics library
+### Using Basic Graphics Library
 
 #### Display environment:
 
