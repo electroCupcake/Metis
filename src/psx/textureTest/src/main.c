@@ -16,7 +16,7 @@ u_long __ramsize   = 0x00200000; // force 2 megabytes of RAM
 u_long __stacksize = 0x00004000; // force 16 kilobytes of stack
 
 void graphics();
-void display(POLY_F4 *f4);
+void display(POLY_FT4 *f4);
 
 static u_char g_pad[2][34];
 
@@ -191,7 +191,7 @@ void graphics()
 }
 
 
-void display(POLY_F4 *f4)
+void display(POLY_FT4 *f4)
 {
 	GsClearDispArea(0,0,0);
 	DrawPrim(f4);
