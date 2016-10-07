@@ -1,6 +1,5 @@
 #PSX Controller Notes
 
-## Controller
 #### Library: libpad.h
 #### Example: controller
 

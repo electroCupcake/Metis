@@ -1,7 +1,5 @@
 #PSX Texture Notes
 
-## Textures
-
 #### Library: libgs.h, libgpu.h, libgte.h
 
 #### Example: textureTest, textureTestCD

@@ -1,6 +1,4 @@
-#PSX Low Level Notes
-
-## Graphics
+#PSX Graphics Notes
 
 #### Library: libgs.h, libgpu.h, libgte.h
 

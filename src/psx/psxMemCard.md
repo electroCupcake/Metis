@@ -1,6 +1,4 @@
-#PSX Texture Notes
-
-## Memory Card
+#PSX Memory Card Notes
 
 #### Library: libcard.h
 
