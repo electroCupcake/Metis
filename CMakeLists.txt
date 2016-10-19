@@ -18,27 +18,35 @@ if(PSX)
   
   file(GLOB ARCH_SRC "src/psx/*.c")
   
-elseif(MINGW OR MSYS OR CYGWIN OR MSVC)
-  message(STATUS "WINDOWS BUILD")
-  
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib_win)
-  
-  file(GLOB ARCH_SRC "src/win/*.c")
-
-elseif(APPLE OR WATCOM OR BORLAND)
-  message(FATAL_ERROR "CAN NOT BUILD FOR APPLE, WATCOM, BORLAND")
-  
-elseif(UNIX)
-  message(STATUS "LINUX BUILD")
-  
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib_nix)
-  
-  file(GLOB ARCH_SRC "src/nix/*.c")
-  
 else()
-  message(FATAL_ERROR "NO BUILD TARGET MATCH")
+  message(STATUS "OPENGL BUILD")
   
-endif()
+  file(GLOB OPENGL_SRC "src/opengl/*.c")
+  
+  list(APPEND SOURCES ${OPENGL_SRC})
+  
+  if(MINGW OR MSYS OR CYGWIN OR MSVC)
+    message(STATUS "WINDOWS OS")
+    
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib_win)
+    
+    file(GLOB ARCH_SRC "src/win/*.c")
+
+  elseif(APPLE OR WATCOM OR BORLAND)
+    message(FATAL_ERROR "CAN NOT BUILD FOR APPLE, WATCOM, BORLAND")
+    
+  elseif(UNIX)
+    message(STATUS "LINUX OS")
+    
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib_nix)
+    
+    file(GLOB ARCH_SRC "src/nix/*.c")
+    
+  else()
+    message(FATAL_ERROR "NO BUILD TARGET MATCH")
+    
+  endif()
+endif();
 
 list(APPEND SOURCES ${ARCH_SRC})
 add_library(${MAIN} STATIC ${SOURCES})
