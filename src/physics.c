@@ -1,6 +1,6 @@
 /*
 * Metis 2D Game Engine
-* 2016 John Convertino, Jeff Eckert
+* 2016 John Convertino
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 *
 * The full License is located in the root directory of this project, named LICENSE.txt.
 *
-* Developed By: John Convertino, Jeff Eckert
+* Developed By: John Convertino
 * 
 * See Header for information about this source file.
 * 

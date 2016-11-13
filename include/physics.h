@@ -1,6 +1,6 @@
 /*
 * Metis 2D Game Engine
-* 2016 John Convertino, Jeff Eckert
+* 2016 John Convertino
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -18,13 +18,16 @@
 *
 * The full License is located in the root directory of this project, named LICENSE.txt.
 *
-* Developed By: John Convertino, Jeff Eckert
+* Developed By: John Convertino
 *
 * INFORMATION ABOUT THE HEADER AND ITS CONTENTS (WHAT IT ALLOWS YOU TO    * DO).
 *
 * Status: v0.0.0 -NADA
 * Previous
 */
+
+#ifndef _PHYSICS_H
+#define _PHYSICS_H
 
 #include "gameObject.h"
 
@@ -38,3 +41,5 @@ struct s_physics {
 struct s_physics *createPhysics();
 
 int attachPhysics(struct s_gameObject gameObject, enum physicsType type);
+
+#endif
