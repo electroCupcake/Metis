@@ -29,4 +29,21 @@
 #ifndef _OBJECT_BUILDER_H
 #define _OBJECT_BUILDER_H
 
+#include "types.h"
+
+//call to initilize yxml and setup get prim data
+void initObjectBuilder();
+
+//reset prim data for new prim data to be fed in (followed by setXMLdata)
+int resetObjectBuilder();
+
+//free the primitive struct this library returns (will also free texture data if it is allocated).
+void freeObject(struct s_object **pp_object);
+
+//set xml data pointer to use for data extraction 
+void setXMLdata(char const *p_xmlData);
+
+//parse the data
+struct s_object *getObject();
+
 #endif

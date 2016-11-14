@@ -1,5 +1,5 @@
-SOURCES = bmpmanip.c
-LIBRARY = libbmpm.lib
+SOURCES = imgToTex.c
+LIBRARY = libimgtex.lib
 PSX_CC = CCPSX.EXE
 PSX_AR = PSYLIB.EXE
 PSX_CFLAGS = -O3  -c

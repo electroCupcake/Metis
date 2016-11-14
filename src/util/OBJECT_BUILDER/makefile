@@ -1,8 +1,8 @@
-SOURCES = getprim.c
-LIBRARY = libgp.lib
+SOURCES = objectBuilder.c
+LIBRARY = libobjbld.lib
 PSX_CC = CCPSX.EXE
 PSX_AR = PSYLIB.EXE
-PSX_CFLAGS = -O3 -I ../YXML_PSYQ_PORT -I ../engine -c
+PSX_CFLAGS = -O3 -I ../YXML_PSYQ_PORT -I ../../../include -c
 PSX_ARFLAGS = /u
 PSX_OBJECTS = $(SOURCES:.c=.obj)
 

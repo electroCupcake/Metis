@@ -29,10 +29,35 @@
 #ifndef _TYPES_H
 #define _TYPES_H
 
+#ifndef PROCESS_SUCCESS
+  #define PROCESS_SUCCESS 0
+#endif
+
+#ifndef PROCESS_FAILURE
+  #define PROCESS_FAILURE -1
+#endif
+
 #include <stdint.h>
 
-enum en_primType {TYPE_F4, TYPE_FT4, TYPE_G4, TYPE_GT4, TYPE_SPRITE, TYPE_TILE};
-enum en_objectType {PLAYER, ENEMY, FRIEND, STATIC, MOVABLE};
+enum en_primType {TYPE_F4, TYPE_FT4, TYPE_G4, TYPE_GT4, TYPE_SPRITE, TYPE_TILE, NONE};
+
+enum en_objectType {PLAYER, ENEMY, FRIEND, STATIC, MOVABLE, NONE};
+
+struct
+{
+  en_primType type;
+  char *p_string
+} s_primLookup;
+
+struct s_primLookup primLookup[] = {{TYPE_F4, "TYPE_F4"}, {TYPE_FT4, "TYPE_FT4"}, {TYPE_G4, "TYPE_G4"}, {TYPE_GT4, "TYPE_GT4"}, {TYPE_SPRITE, "TYPE_SPRITE"}, {TYPE_TILE, "TYPE_TILE"}, {NONE, "END"}};
+
+struct
+{
+  en_objectType type;
+  char *p_string;
+} s_objectLookup;
+
+struct s_objectLookup objectLookup[] = {{PLAYER, "PLAYER"}, {ENEMY, "ENEMY"}, {FRIEND, "FRIEND"}, {STATIC, "STATIC"}, {MOVABLE, "MOVABLE"}, {NONE, "END"}};
 
 struct s_gamePad
 {
@@ -121,8 +146,8 @@ struct s_texture
   
   char file[256];
   
-  struct s_svertex vertex0;
-  struct s_svertex vramVertex;
+  struct s_svector vector0;
+  struct s_svector vramVector;
   struct s_dimensions dimensions;
   struct s_tpage tpage;
   
