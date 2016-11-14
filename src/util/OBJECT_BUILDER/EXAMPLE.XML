@@ -1,4 +1,4 @@
-<ACTOR_PRIM primetype="TYPE_SPRITE" objecttype="PLAYER">
+<ACTOR_PRIM primtype="TYPE_SPRITE" objecttype="PLAYER">
   <local>
     <vector0>
       <x>-25</x>

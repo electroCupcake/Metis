@@ -50,7 +50,7 @@ struct
 
 
 //defines of names for xmltypes
-#define XML_TYPE_NAME "primetype"
+#define XML_TYPE_NAME "primtype"
 #define XML_TYPE_OBJ  "objecttype"
 #define XML_VECTOR_0  "vector0"
 #define XML_VECTOR_1  "vector1"
