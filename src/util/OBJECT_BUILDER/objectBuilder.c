@@ -176,7 +176,7 @@ struct s_object *getObject()
   
   memset(p_object, 0, sizeof(*p_object));
   
-  p_object->p_texture = NULL;
+  p_object->local.p_texture = NULL;
   
   if(findXMLattr(XML_TYPE_NAME) < 0)
   {
@@ -244,6 +244,48 @@ struct s_object *getObject()
     findColor(&p_object->local.color1, XML_COLOR_2);
     
     findColor(&p_object->local.color1, XML_COLOR_3);
+    
+     //get texture info
+    if(findXMLblock(XML_TEXTURE) == 0)
+    {
+      //keep us within this block now that we have found it.
+      setXMLblock();
+      
+      p_object->local.p_texture = calloc(1, sizeof(*p_object->local.p_texture));
+
+      if(p_object->local.p_texture == NULL)
+      {
+	free(p_object);
+	return NULL;
+      }
+      
+      returnValue = findSVector(&p_object->local.p_texture->vector0, XML_VECTOR_0);
+      
+      if(returnValue < 0)
+      {
+	fprintf(stderr, "\nCOULD NOT FIND VECTOR 0\n");
+	free(p_object);
+	return NULL;
+      }
+      
+      returnValue = findSVector(&p_object->local.p_texture->vramVector, XML_VRAM);
+      
+      if(returnValue < 0)
+      {
+	fprintf(stderr, "\nCOULD NOT FIND VRAM LOCATION\n");
+	free(p_object);
+	return NULL;
+      }
+      
+      if(findXMLelem(XML_FILE) < 0)
+      {
+	fprintf(strerr, "\nCOULD NOT FIND FILE NAME\n");
+	free(p_object);
+	return NULL;
+      }
+      
+      strcpy(p_object->local.p_texture->file, g_parserData.stringBuffer);
+    }
 
     resetXMLstart();
   }
@@ -256,31 +298,9 @@ struct s_object *getObject()
   
   if(findXMLlblock(XML_WORLD) == 0)
   {
-    returnValue = findLVector(&p_object->world->transCoor, XML_VECTOR_0);
-    
-    if(returnValue < 0)
-    {
-      fprintf(stderr, "\nCOULD NOT FIND VECTOR 0\n");
-      free(p_object);
-      return NULL;
-    }
-  }
-  
-  //get texture info
-  if(findXMLblock(XML_TEXTURE) == 0)
-  {
-    //keep us within this block now that we have found it.
     setXMLblock();
     
-    p_object->p_texture = calloc(1, sizeof(*p_object->p_texture));
-
-    if(p_object->p_texture == NULL)
-    {
-      free(p_object);
-      return NULL;
-    }
-    
-    returnValue = findSVector(&p_object->p_texture->vector0, XML_VECTOR_0);
+    returnValue = findLVector(&p_object->p_texture->vector0, XML_VECTOR_0);
     
     if(returnValue < 0)
     {
@@ -289,23 +309,7 @@ struct s_object *getObject()
       return NULL;
     }
     
-    returnValue = findSVector(&p_object->p_texture->vramVector, XML_VRAM);
-    
-    if(returnValue < 0)
-    {
-      fprintf(stderr, "\nCOULD NOT FIND VRAM LOCATION\n");
-      free(p_object);
-      return NULL;
-    }
-    
-    if(findXMLelem(XML_FILE) < 0)
-    {
-      fprintf(strerr, "\nCOULD NOT FIND FILE NAME\n");
-      free(p_object);
-      return NULL;
-    }
-    
-    strcpy(p_object->p_texture->file, g_parserData.stringBuffer);
+    resetXMLstart();
   }
   
   return p_object;

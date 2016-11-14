@@ -180,11 +180,11 @@ struct s_object
     struct s_color color1;
     struct s_color color2;
     struct s_color color3;
+    
+    struct s_texture *p_texture;
   } local;
   
   struct s_translation world;
-  
-  struct s_texture *p_texture;
 };
 
 struct s_environment
