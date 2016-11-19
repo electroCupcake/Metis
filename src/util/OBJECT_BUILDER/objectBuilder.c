@@ -28,6 +28,7 @@
 
 #include "objectBuilder.h"
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <yxml.h>
 
@@ -73,6 +74,9 @@ struct
 #define XML_LOCAL     "local"
 #define XML_WORLD     "world"
 #define XML_FILE      "file"
+
+struct s_objectLookup objectLookup[] = {{PLAYER, "PLAYER"}, {ENEMY, "ENEMY"}, {FRIEND, "FRIEND"}, {STATIC, "STATIC"}, {MOVABLE, "MOVABLE"}, {NO_OBJ, "END"}};
+struct s_primLookup primLookup[] = {{TYPE_F4, "TYPE_F4"}, {TYPE_FT4, "TYPE_FT4"}, {TYPE_G4, "TYPE_G4"}, {TYPE_GT4, "TYPE_GT4"}, {TYPE_SPRITE, "TYPE_SPRITE"}, {TYPE_TILE, "TYPE_TILE"}, {NO_PRIM, "END"}};
 
 //helper functions
 //finds the attribute and stores the result in stringBuffer, returns 0 if found, -1 if not
@@ -128,17 +132,17 @@ void freeObject(struct s_object **pp_object)
 {
   if(pp_object != NULL)
   {
-    if((*pp_object)->p_texture != NULL)
+    if((*pp_object)->local.p_texture != NULL)
     {
-      if((*p_object)->p_texture->p_data != NULL)
+      if((*pp_object)->local.p_texture->p_data != NULL)
       {
-	free((*p_object)->p_texture->p_data);
+	free((*pp_object)->local.p_texture->p_data);
       }
       
-      free((*p_object)->p_texture);
+      free((*pp_object)->local.p_texture);
     }
     
-    free(*p_object);
+    free(*pp_object);
   }
 }
 
@@ -170,7 +174,7 @@ struct s_object *getObject()
   
   if(p_object == NULL)
   {
-    fprintf("\nBAD ALLOC\n");
+    fprintf(stderr, "\nBAD ALLOC\n");
     return NULL;
   }
   
@@ -241,9 +245,9 @@ struct s_object *getObject()
     
     findColor(&p_object->local.color1, XML_COLOR_1);
     
-    findColor(&p_object->local.color1, XML_COLOR_2);
+    findColor(&p_object->local.color2, XML_COLOR_2);
     
-    findColor(&p_object->local.color1, XML_COLOR_3);
+    findColor(&p_object->local.color3, XML_COLOR_3);
     
      //get texture info
     if(findXMLblock(XML_TEXTURE) == 0)
@@ -279,7 +283,7 @@ struct s_object *getObject()
       
       if(findXMLelem(XML_FILE) < 0)
       {
-	fprintf(strerr, "\nCOULD NOT FIND FILE NAME\n");
+	fprintf(stderr, "\nCOULD NOT FIND FILE NAME\n");
 	free(p_object);
 	return NULL;
       }
@@ -296,11 +300,11 @@ struct s_object *getObject()
     return NULL;
   }
   
-  if(findXMLlblock(XML_WORLD) == 0)
+  if(findXMLblock(XML_WORLD) == 0)
   {
     setXMLblock();
     
-    returnValue = findLVector(&p_object->p_texture->vector0, XML_VECTOR_0);
+    returnValue = findLVector(&p_object->world.transCoor, XML_VECTOR_0);
     
     if(returnValue < 0)
     {
@@ -481,6 +485,10 @@ int findSVector(struct s_svector *p_vector, char const * const p_vectorName)
   {
     p_vector->vz = 0; 
   }
+  else
+  {
+    p_vector->vz = atoi(g_parserData.stringBuffer);
+  }
   
   resetXMLblock();
   
@@ -520,9 +528,12 @@ int findLVector(struct s_lvector *p_vector, char const * const p_vectorName)
   
   if(findXMLelem(XML_Z_CORR) < 0)
   {
-    p_vector->vz = 0; 
+    resetXMLstart();
+    return PROCESS_FAILURE;
   }
-  
+
+  p_vector->vz = atoi(g_parserData.stringBuffer);
+
   resetXMLblock();
   
   return PROCESS_SUCCESS;

@@ -37,27 +37,25 @@
   #define PROCESS_FAILURE -1
 #endif
 
+#define DOUBLE_BUF 2
+
 #include <stdint.h>
 
-enum en_primType {TYPE_F4, TYPE_FT4, TYPE_G4, TYPE_GT4, TYPE_SPRITE, TYPE_TILE, NONE};
+enum en_primType {TYPE_F4, TYPE_FT4, TYPE_G4, TYPE_GT4, TYPE_SPRITE, TYPE_TILE, NO_PRIM};
 
-enum en_objectType {PLAYER, ENEMY, FRIEND, STATIC, MOVABLE, NONE};
+enum en_objectType {PLAYER, ENEMY, FRIEND, STATIC, MOVABLE, NO_OBJ};
 
-struct
+struct s_primLookup
 {
-  en_primType type;
-  char *p_string
-} s_primLookup;
-
-struct s_primLookup primLookup[] = {{TYPE_F4, "TYPE_F4"}, {TYPE_FT4, "TYPE_FT4"}, {TYPE_G4, "TYPE_G4"}, {TYPE_GT4, "TYPE_GT4"}, {TYPE_SPRITE, "TYPE_SPRITE"}, {TYPE_TILE, "TYPE_TILE"}, {NONE, "END"}};
-
-struct
-{
-  en_objectType type;
+  enum en_primType type;
   char *p_string;
-} s_objectLookup;
+};
 
-struct s_objectLookup objectLookup[] = {{PLAYER, "PLAYER"}, {ENEMY, "ENEMY"}, {FRIEND, "FRIEND"}, {STATIC, "STATIC"}, {MOVABLE, "MOVABLE"}, {NONE, "END"}};
+struct s_objectLookup
+{
+  enum en_objectType type;
+  char *p_string;
+};
 
 struct s_gamePad
 {
@@ -94,8 +92,8 @@ struct s_psxBuffer
 {
   struct s_primitive *p_primitive;
   unsigned long *p_ot;
-  DISPENV disp;
-  DRAWENV draw;
+//   DISPENV disp;
+//   DRAWENV draw;
 };
 
 struct s_svector
@@ -156,10 +154,10 @@ struct s_texture
 
 struct s_translation
 {  
-  struct s_lvertex transCoor;
-  struct s_lvertex scaleCoor;
+  struct s_lvector transCoor;
+  struct s_lvector scaleCoor;
   
-  struct s_svertex rotCoor;
+  struct s_svector rotCoor;
   
   struct s_matrix matrix;
 };

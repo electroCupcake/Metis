@@ -11,7 +11,7 @@ all: BUILD
 BUILD: $(EXE) $(SOURCES)
 	
 $(EXE): $(OBJECTS)
-	$(CC) $(LFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LFLAGS) 
 	rm -f $^
 
 %.o: %.c
