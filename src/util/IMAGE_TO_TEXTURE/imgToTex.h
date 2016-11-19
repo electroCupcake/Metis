@@ -29,6 +29,8 @@
 #ifndef _IMGTOTEX_H
 #define _IMGTOTEX_H
 
+#include <stdint.h>
+
 #ifndef PROCESS_SUCCESS
   #define PROCESS_SUCCESS	0
 #endif
@@ -37,9 +39,9 @@
   #define PROCESS_FAILURE	-1
 #endif
 
-enum en_imageType {BITMAP_16, TIM_4, TIM_8, TIM_16, INVALID};
+enum en_imageType {BITMAP_16, BITMAP_24, TIM_4, TIM_8, TIM_16, TIM_24, INVALID};
 
-//sets semi trans bit in image data to one, use on raw data 16bit (texture data) only
+//sets semi trans bit in image data to one, use on raw data 16bit (texture data) only, with corrected color order for bitmaps (BGR)
 //0 or greater success, -1 failure
 int addSemiTrans(uint8_t *iop_data, uint8_t red, uint8_t green, uint8_t blue, int len, enum en_imageType type);
 

@@ -43,6 +43,9 @@
 #define TIM_HEADER_SIZE    20
 #define BMP_HEADER_SIZE    40
 
+#define TIM_HEADER	0x0010
+#define BMP_HEADER	0x4D42
+
 #define TIM_4BIT	0x08
 #define TIM_8BIT	0x09
 #define TIM_16BIT	0x02
@@ -71,9 +74,10 @@ int addSemiTrans(uint8_t *op_data, uint8_t red, uint8_t green, uint8_t blue, int
   {
     case BITMAP_16:
     case TIM_16:
-      setTransBit16(op_data, red, green, blue, 1, len);
+      setTransBit(op_data, red, green, blue, 1, len);
       break;
     default:
+      fprintf(stderr, "\nINVALID TYPE\n");
       return PROCESS_FAILURE;
       break;
   }
@@ -88,9 +92,10 @@ int removeSemiTrans(uint8_t *op_data, int len, enum en_imageType type)
   {
     case BITMAP_16:
     case TIM_16:
-      setTransBit16(op_data, 0, 0, 0, 0, len);
+      setTransBit(op_data, 0, 0, 0, 0, len);
       break;
     default:
+      fprintf(stderr, "\nINVALID TYPE\n");
       return PROCESS_FAILURE;
       break;
   }
@@ -100,7 +105,7 @@ int removeSemiTrans(uint8_t *op_data, int len, enum en_imageType type)
 
 //convert bitmap data to RAW, if no header detected, or incorrect header, this does nothing.
 //RAW data is converted to ABGR (MSB to LSB) from the bmp ARGB (16 bit images only)
-int imageToTexture(uint8_t **iop_data, int len, uint16_t *op_width, uint16_t *op_height, enum en_imageType *op_type);
+int imageToTexture(uint8_t **iop_data, int len, uint16_t *op_width, uint16_t *op_height, enum en_imageType *op_type)
 {
   int dataOffset = 0;
   int newLen = 0;
@@ -109,11 +114,13 @@ int imageToTexture(uint8_t **iop_data, int len, uint16_t *op_width, uint16_t *op
   
   if(len <= 0)
   {
+    fprintf(stderr, "\nLEN FAIL\n");
     return PROCESS_FAILURE;
   }
   
   if(op_width == NULL || op_height == NULL || op_type == NULL)
   {
+    fprintf(stderr, "\nPOINTER FAIL\n");
     return PROCESS_FAILURE;
   }
   //this will return the offset, if its not a 16 bit bitmap -1, raw data, 0
@@ -121,30 +128,32 @@ int imageToTexture(uint8_t **iop_data, int len, uint16_t *op_width, uint16_t *op
   
   if(dataOffset <= 0)
   {
+    fprintf(stderr, "\nOFFSET FAIL\n");
     return PROCESS_FAILURE;
   }
   
   newLen = len - dataOffset;
   
-  memmove(*op_data, &((*op_data)[dataOffset]), newLen);
+  memmove(*iop_data, *iop_data + dataOffset, newLen);
   
-  p_temp = realloc(*op_data, newLen);
+  p_temp = realloc(*iop_data, newLen);
   
   if(p_temp != NULL)
   {
-    *op_data = p_temp;
+    *iop_data = p_temp;
   }
   
   switch(*op_type)
   {
     case BITMAP_24:
     case BITMAP_16:
-      reverseData(*op_data, newLen, *op_width, *op_height);
+      reverseData(*iop_data, newLen, *op_width, *op_height);
       break;
     case TIM_24:
     case TIM_16:
       break;
     default:
+      fprintf(stderr, "\nINVALID TYPE\n");
       return PROCESS_FAILURE;
       break;
   }
@@ -185,6 +194,7 @@ int swapRedBlue(uint8_t *op_data, int len, enum en_imageType type)
       }
       break;
     default:
+      fprintf(stderr, "\nINVALID TYPE\n");
       return PROCESS_FAILURE;
       break;
   }
@@ -194,7 +204,7 @@ int swapRedBlue(uint8_t *op_data, int len, enum en_imageType type)
 
 //detects bitmap image, if it exists and is of the right type
 //this will return the offset, if its not a 16 bit bitmap -1, raw data, 0
-int detectImage(uint8_t const *p_data, int len, uint16_t *op_width, uint16_t  *op_height, enum en_imageType *op_type);
+int detectImage(uint8_t const *p_data, int len, uint16_t *op_width, uint16_t  *op_height, enum en_imageType *op_type)
 {
   int index = 0;
   int dataOffset = 0;
@@ -213,6 +223,10 @@ int detectImage(uint8_t const *p_data, int len, uint16_t *op_width, uint16_t  *o
   
   type = p_data[0] | p_data[1] << 8;
   
+  #ifdef DEBUG
+    fprintf(stderr, "TYPE: %d TIM: %d BMP: %d\n", type, TIM_HEADER, BMP_HEADER);
+  #endif
+    
   switch(type)
   {
     case TIM_HEADER:
@@ -272,10 +286,15 @@ int detectImage(uint8_t const *p_data, int len, uint16_t *op_width, uint16_t  *o
       
       break;
     default:
+      fprintf(stderr, "\nINVALID TYPE\n");
       *op_type = INVALID;
       return INVALID_TYPE;
       break;
   }
+  
+  #ifdef DEBUG
+    fprintf(stderr, "OFFSET %d, WIDTH %d, HEIGHT %d\n", dataOffset, *op_width, *op_height);
+  #endif
   
   return dataOffset;
 }
