@@ -27,3 +27,219 @@
 */ 
 
 #include "fileIO.h"
+
+//load a data from CD, returns address pointer in memory.
+void loadObjectData(char *p_fname, char **op_data, uint32_t *op_len)
+{
+  int sizeSectors = 0;
+  int numRemain = 0;
+  int prevNumRemain = 0;
+  u_char result = 0;
+  
+  DslFILE fileInfo;
+  
+  if(*op_data != NULL)
+  {
+    #ifdef DEBUG
+      printf("\nINPUT DATA NOT NULL\n");
+    #endif
+    return;
+  }
+  
+  if(DsSearchFile(&fileInfo, p_fname) <= 0)
+  {
+    #ifdef DEBUG
+      printf("\nFILE SEARCH FAILED\n");
+    #endif
+    return;
+  }
+
+  #ifdef DEBUG
+    printf("\nFILE SEARCH SUCCESS\n");
+  #endif
+    
+  sizeSectors = (fileInfo.size + 2047) / 2048;
+
+  #ifdef DEBUG
+    printf("\nSECTOR SIZE: %d %d", sizeSectors, fileInfo.size);
+  #endif
+  
+  *op_data = malloc(sizeSectors * 2048);
+  
+  if(*op_data == NULL)
+  {
+    #ifdef DEBUG
+      printf("\nALLOCATION FAILED\n");
+    #endif
+    return;
+  }
+  
+  #ifdef DEBUG
+    printf("\nMEMORY ALLOCATED\n");
+  #endif
+  
+  DsRead(&fileInfo.pos, sizeSectors, (u_long *)*op_data, DslModeSpeed);
+  
+  do
+  {
+    numRemain = DsReadSync(&result);
+    
+    if(numRemain != prevNumRemain)
+    {
+      #ifdef DEBUG
+	printf("\nNUM REMAIN: %d\n", numRemain);
+      #endif
+      prevNumRemain = numRemain;
+    }
+  }
+  while(numRemain);
+  
+  if(op_len != NULL)
+  {
+    *op_len = fileInfo.size;
+  }
+  
+  #ifdef DEBUG
+    printf("\nREAD COMPLETE\n");
+  #endif
+}
+//read from the memory card and return pointer to data
+void loadSaveData(char *p_fname, char **op_data, uint32_t len)
+{
+  long cmds;
+  long result;
+  
+  if(*op_data != NULL)
+  {
+    #ifdef DEBUG
+      printf("\nINPUT DATA NOT NULL\n");
+    #endif
+    return;
+  }
+  
+  PadStopCom();
+  
+  *op_data = malloc(len);
+  
+  if(*op_data == NULL)
+  {
+    #ifdef DEBUG
+      printf("\nMEMORY ALLOCATION FAILED\n");
+    #endif
+    return;
+  }
+    
+  MemCardInit(1);
+
+  MemCardStart();
+
+  if(MemCardSync(0, &cmds, &result) <= 0)
+  {
+    #ifdef DEBUG
+      printf("\nSync Failed\n");
+    #endif
+  }
+
+  MemCardAccept(0);
+
+  if(MemCardSync(0, &cmds, &result) <= 0)
+  {
+    #ifdef DEBUG
+      printf("\nSync Failed\n");
+    #endif
+  }
+
+  if(MemCardOpen(0, p_fname, O_RDONLY) != 0)
+  {
+    #ifdef DEBUG
+      printf("\nOpen Issue\n");
+    #endif
+    free(*op_data);
+    *op_data = NULL;
+    return; 
+  }
+
+  if(MemCardReadData((unsigned long *)*op_data, 0, len)  != 0)
+  {
+    #ifdef DEBUG
+      printf("\nRead Issue\n");
+    #endif
+  }
+
+  if(MemCardSync(0, &cmds, &result) <= 0)
+  {
+    #ifdef DEBUG
+      printf("\nSync Failed\n");
+    #endif
+  }
+
+  MemCardClose();
+
+  MemCardStop();
+  
+  PadStartCom();
+}
+//write to the memory card using data passed to it.
+void saveSaveData(char *p_fname, char *ip_data, uint32_t len)
+{
+  long cmds;
+  long result;
+  
+  if(ip_data == NULL)
+  {
+    #ifdef DEBUG
+      printf("\nNULL POINTER PASSED\n");
+    #endif
+    return;
+  }
+  
+  PadStopCom();
+    
+  MemCardInit(1);
+
+  MemCardStart();
+
+  if(MemCardSync(0, &cmds, &result) <= 0)
+  {
+    #ifdef DEBUG
+      printf("\nSync Failed\n");
+    #endif
+  }
+
+  MemCardAccept(0);
+
+  if(MemCardSync(0, &cmds, &result) <= 0)
+  {
+    #ifdef DEBUG
+      printf("\nSync Failed\n");
+    #endif
+  }
+
+  if(MemCardOpen(0, p_fname, O_WRONLY) != 0)
+  {
+    #ifdef DEBUG
+      printf("\nOpen Issue\n");
+    #endif
+    return;
+  }
+
+  if(MemCardWriteData((unsigned long *)ip_data, 0, len)  != 0)
+  {
+    #ifdef DEBUG
+      printf("\nWrite Issue\n");
+    #endif
+  }
+
+  if(MemCardSync(0, &cmds, &result) <= 0)
+  {
+    #ifdef DEBUG
+      printf("\nSync Failed\n");
+    #endif
+  }
+
+  MemCardClose();
+
+  MemCardStop();
+  
+  PadStartCom();
+}

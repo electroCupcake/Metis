@@ -77,7 +77,9 @@ int addSemiTrans(uint8_t *op_data, uint8_t red, uint8_t green, uint8_t blue, int
       setTransBit(op_data, red, green, blue, 1, len);
       break;
     default:
-      fprintf(stderr, "\nINVALID TYPE\n");
+      #ifdef DEBUG
+	printf("\nINVALID TYPE\n");
+      #endif
       return PROCESS_FAILURE;
       break;
   }
@@ -95,7 +97,9 @@ int removeSemiTrans(uint8_t *op_data, int len, enum en_imageType type)
       setTransBit(op_data, 0, 0, 0, 0, len);
       break;
     default:
-      fprintf(stderr, "\nINVALID TYPE\n");
+      #ifdef DEBUG
+	printf("\nINVALID TYPE\n");
+      #endif
       return PROCESS_FAILURE;
       break;
   }
@@ -114,13 +118,17 @@ int imageToTexture(uint8_t **iop_data, int len, uint16_t *op_width, uint16_t *op
   
   if(len <= 0)
   {
-    fprintf(stderr, "\nLEN FAIL\n");
+    #ifdef DEBUG
+      printf("\nLEN FAIL\n");
+    #endif
     return PROCESS_FAILURE;
   }
   
   if(op_width == NULL || op_height == NULL || op_type == NULL)
   {
-    fprintf(stderr, "\nPOINTER FAIL\n");
+    #ifdef DEBUG
+      printf("\nPOINTER FAIL\n");
+    #endif
     return PROCESS_FAILURE;
   }
   //this will return the offset, if its not a 16 bit bitmap -1, raw data, 0
@@ -128,7 +136,9 @@ int imageToTexture(uint8_t **iop_data, int len, uint16_t *op_width, uint16_t *op
   
   if(dataOffset <= 0)
   {
-    fprintf(stderr, "\nOFFSET FAIL\n");
+    #ifdef DEBUG
+      printf("\nOFFSET FAIL\n");
+    #endif
     return PROCESS_FAILURE;
   }
   
@@ -153,7 +163,9 @@ int imageToTexture(uint8_t **iop_data, int len, uint16_t *op_width, uint16_t *op
     case TIM_16:
       break;
     default:
-      fprintf(stderr, "\nINVALID TYPE\n");
+      #ifdef DEBUG
+	printf("\nINVALID TYPE\n");
+      #endif
       return PROCESS_FAILURE;
       break;
   }
@@ -194,7 +206,9 @@ int swapRedBlue(uint8_t *op_data, int len, enum en_imageType type)
       }
       break;
     default:
-      fprintf(stderr, "\nINVALID TYPE\n");
+      #ifdef DEBUG
+	printf("\nINVALID TYPE\n");'
+      #endif
       return PROCESS_FAILURE;
       break;
   }
@@ -224,7 +238,7 @@ int detectImage(uint8_t const *p_data, int len, uint16_t *op_width, uint16_t  *o
   type = p_data[0] | p_data[1] << 8;
   
   #ifdef DEBUG
-    fprintf(stderr, "TYPE: %d TIM: %d BMP: %d\n", type, TIM_HEADER, BMP_HEADER);
+    printf("TYPE: %d TIM: %d BMP: %d\n", type, TIM_HEADER, BMP_HEADER);
   #endif
     
   switch(type)
@@ -286,14 +300,16 @@ int detectImage(uint8_t const *p_data, int len, uint16_t *op_width, uint16_t  *o
       
       break;
     default:
-      fprintf(stderr, "\nINVALID TYPE\n");
+      #ifdef DEBUG
+	printf("\nINVALID TYPE\n");
+      #endif
       *op_type = INVALID;
       return INVALID_TYPE;
       break;
   }
   
   #ifdef DEBUG
-    fprintf(stderr, "OFFSET %d, WIDTH %d, HEIGHT %d\n", dataOffset, *op_width, *op_height);
+    printf("OFFSET %d, WIDTH %d, HEIGHT %d\n", dataOffset, *op_width, *op_height);
   #endif
   
   return dataOffset;

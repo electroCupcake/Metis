@@ -27,3 +27,42 @@
 */ 
 
 #include "controller.h"
+
+#define MAX_PLAYERS 2
+struct
+{
+  struct s_gamePad gamePad;
+  struct s_object *p_object;
+  void (*movement)(struct s_gamePad gamePad, struct s_object *p_object);
+} g_controlData[MAX_PLAYERS]
+
+void initController()
+{
+  PadInitDirect((u_char *)&g_controlData[0].gamePad, (u_char *)&g_controlData[1].gamePad);
+  PadStartCom();
+}
+
+void registerControllerOne(void (*movement)(struct s_gamePad gamePad, struct s_object *p_object), struct s_object *p_object)
+{
+  g_controlData[0].movement = movement;
+  g_controlData[0].p_object = p_object;
+}
+
+void registerControllerTwo(void (*movement)(struct s_gamePad gamePad, struct s_object *p_object), struct s_object *p_object)
+{
+  g_controlData[1].movement = movement;
+  g_controlData[1].p_object = p_object;
+}
+
+void processControllers()
+{
+  if(g_controlData[0].movement != NULL)
+  {
+    g_controlData[0].movement(g_controlData[0].gamePad, g_controlData[0].p_object);
+  }
+  
+  if(g_controlData[1].movement != NULL)
+  {
+    g_controlData[1].movement(g_controlData[1].gamePad, g_controlData[1].p_object);
+  }
+}

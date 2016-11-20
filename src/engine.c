@@ -26,51 +26,28 @@
 *
 */
 #include "engine.h"
+#include "controller.h"
+#include "gameObject.h"
 #include "graphics.h"
 
-struct
-{
-  int numObjects;
-  
-  struct
-  {
-    struct
-    {
-      struct s_object **pp_objects;
-    } local;
-    
-    struct s_translation screen;
-    
-  } world;
-  
-  struct 
-  {
-    char *p_title;
-    char *p_message;
-    int  *p_data;
-  } envMessage;
-  
-} g_environment;
-
-struct 
-{
-  //function pointers for callbacks
-  void (*graphics)(g_environment *);
-  void (*controllerHandler)(void);
-} g_callbacks;
+struct s_environment g_environment;
 
 //setup needed engine requirments
 void initEngine(int const width, int const height, int const depth)
 {
   memset(&g_environment, 0, sizeof(g_environment));
   
-  initGraphics(width, height, depth);
+  initGraphics(width, height, depth, &g_environment);
   
-  g_callbacks.graphics = &graphicsCallback;
+  initController();
 }
 
 //process callback handlers
 void processEngine()
 {
-  g_callbacks.graphics(&g_environment);
+  processControllers();
+  
+  translate();
+  
+  display();
 }

@@ -33,23 +33,6 @@
 #include <yxml.h>
 
 #define DEFAULT_BUFSIZE 2048
-
-//holds data relating to xml parsing
-struct
-{
-  int bufSize;
-  char stringBuffer[256];
-  
-  yxml_t yxml;
-  
-  char p_stack[DEFAULT_BUFSIZE];
-  char const *p_xmlData;
-  char const *p_xmlDataBlock;
-  char const *p_xmlDataStart;
-  
-} g_parserData;
-
-
 //defines of names for xmltypes
 #define XML_TYPE_NAME "primtype"
 #define XML_TYPE_OBJ  "objecttype"
@@ -75,10 +58,25 @@ struct
 #define XML_WORLD     "world"
 #define XML_FILE      "file"
 
+//holds data relating to xml parsing
+struct
+{
+  int bufSize;
+  char stringBuffer[256];
+  
+  yxml_t yxml;
+  
+  char p_stack[DEFAULT_BUFSIZE];
+  char const *p_xmlData;
+  char const *p_xmlDataBlock;
+  char const *p_xmlDataStart;
+  
+} g_parserData;
+
 struct s_objectLookup objectLookup[] = {{PLAYER, "PLAYER"}, {ENEMY, "ENEMY"}, {FRIEND, "FRIEND"}, {STATIC, "STATIC"}, {MOVABLE, "MOVABLE"}, {NO_OBJ, "END"}};
 struct s_primLookup primLookup[] = {{TYPE_F4, "TYPE_F4"}, {TYPE_FT4, "TYPE_FT4"}, {TYPE_G4, "TYPE_G4"}, {TYPE_GT4, "TYPE_GT4"}, {TYPE_SPRITE, "TYPE_SPRITE"}, {TYPE_TILE, "TYPE_TILE"}, {NO_PRIM, "END"}};
 
-//helper functions
+//utility functions
 //finds the attribute and stores the result in stringBuffer, returns 0 if found, -1 if not
 int findXMLattr(char const * const p_attr);
 //finds the element and stores the result in stringBuffer, returns 0 if found, -1 if not
@@ -166,7 +164,9 @@ struct s_object *getObject()
   
   if(g_parserData.p_xmlData == NULL)
   {
-    fprintf(stderr, "\nXML DATA NULL\n");
+    #ifdef DEBUG
+      printf("\nXML DATA NULL\n");
+    #endif
     return NULL;
   }
   
@@ -174,7 +174,9 @@ struct s_object *getObject()
   
   if(p_object == NULL)
   {
-    fprintf(stderr, "\nBAD ALLOC\n");
+    #ifdef DEBUG
+      printf("\nBAD ALLOC\n");
+    #endif
     return NULL;
   }
   
@@ -184,7 +186,9 @@ struct s_object *getObject()
   
   if(findXMLattr(XML_TYPE_NAME) < 0)
   {
-    fprintf(stderr, "\nDID NOT FIND PRIMITIVE TYPE\n");
+    #ifdef DEBUG
+      printf("\nDID NOT FIND PRIMITIVE TYPE\n");
+    #endif
     free(p_object);
     return NULL;
   }
@@ -201,7 +205,9 @@ struct s_object *getObject()
   
   if(findXMLattr(XML_TYPE_OBJ) < 0)
   {
-    fprintf(stderr, "\nDID NOT FIND OBJECT TYPE\n");
+    #ifdef DEBUG
+      printf("\nDID NOT FIND OBJECT TYPE\n");
+    #endif
     free(p_object);
     return NULL;
   }
@@ -223,7 +229,9 @@ struct s_object *getObject()
     
     if(returnValue < 0)
     {
-      fprintf(stderr, "\nCOULD NOT FIND VERTEX 0\n");
+      #ifdef DEBUG
+	printf("\nCOULD NOT FIND VERTEX 0\n");
+      #endif
       free(p_object);
       return NULL;
     }
@@ -238,7 +246,9 @@ struct s_object *getObject()
     
     if(returnValue < 0)
     {
-      fprintf(stderr, "\nCOULD NOT FIND COLOR 0\n");
+      #ifdef DEBUG
+	printf("\nCOULD NOT FIND COLOR 0\n");
+      #endif
       free(p_object);
       return NULL;
     }
@@ -267,7 +277,9 @@ struct s_object *getObject()
       
       if(returnValue < 0)
       {
-	fprintf(stderr, "\nCOULD NOT FIND VECTOR 0\n");
+	#ifdef DEBUG
+	  printf("\nCOULD NOT FIND VECTOR 0\n");
+	#endif
 	free(p_object);
 	return NULL;
       }
@@ -276,14 +288,18 @@ struct s_object *getObject()
       
       if(returnValue < 0)
       {
-	fprintf(stderr, "\nCOULD NOT FIND VRAM LOCATION\n");
+	#ifdef DEBUG
+	  printf("\nCOULD NOT FIND VRAM LOCATION\n");
+	#endif
 	free(p_object);
 	return NULL;
       }
       
       if(findXMLelem(XML_FILE) < 0)
       {
-	fprintf(stderr, "\nCOULD NOT FIND FILE NAME\n");
+	#ifdef DEBUG
+	  printf("\nCOULD NOT FIND FILE NAME\n");
+	#endif
 	free(p_object);
 	return NULL;
       }
@@ -295,7 +311,9 @@ struct s_object *getObject()
   }
   else
   {
-    fprintf(stderr, "\nCOULD NOT FIND LOCAL BLOCK\n");
+    #ifdef DEBUG
+      printf("\nCOULD NOT FIND LOCAL BLOCK\n");
+    #endif
     free(p_object);
     return NULL;
   }
@@ -308,7 +326,9 @@ struct s_object *getObject()
     
     if(returnValue < 0)
     {
-      fprintf(stderr, "\nCOULD NOT FIND VECTOR 0\n");
+      #ifdef DEBUG
+	printf("\nCOULD NOT FIND VECTOR 0\n");
+      #endif
       free(p_object);
       return NULL;
     }

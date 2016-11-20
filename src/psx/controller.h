@@ -29,4 +29,14 @@
 #ifndef _CONTROL_H
 #define _CONTROL_H
 
+#include "types.h"
+
+void initController();
+
+void registerControllerOne(void (*movement)(struct s_gamePad gamePad, struct s_object *p_object), struct s_object *p_object);
+
+void registerControllerTwo(void (*movement)(struct s_gamePad gamePad, struct s_object *p_object), struct s_object *p_object);
+
+void processControllers();
+
 #endif

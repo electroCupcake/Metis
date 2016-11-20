@@ -175,4 +175,28 @@ struct s_object
   struct s_translation world;
 };
 
+struct s_environment
+{
+  int numObjects;
+  
+  struct
+  {
+    struct
+    {
+      struct s_object **pp_objects;
+    } local;
+    
+    struct s_translation screen;
+    
+  } world;
+  
+  struct 
+  {
+    char *p_title;
+    char *p_message;
+    int  *p_data;
+  } message;
+  
+};
+
 #endif

@@ -31,8 +31,7 @@
 #ifndef _ENGINE_H
 #define _ENGINE_H
 
-#include "controller.h"
-#include "gameObject.h"
+
 #include "types.h"
 
 //setup needed engine requirments

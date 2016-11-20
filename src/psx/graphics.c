@@ -54,7 +54,9 @@ struct s_psx
   
   struct s_buffer buffer[DOUBLE_BUF];
   
-  struct s_buffer *curBuffer;
+  struct s_buffer *p_currBuffer;
+  
+  struct s_environment *p_environment;
 };
 
 struct s_psx g_psx;
@@ -62,8 +64,9 @@ struct s_psx g_psx;
 //utility functions, all after public functions
 //clear vram of all contents
 void clearVRAM();
+void swapBuffers();
 
-void initGraphics(int const width, int const height, int const depth)
+void initGraphics(int const width, int const height, int const depth, struct s_environment *p_environment)
 {
   int index;
   int bufIndex;
@@ -71,49 +74,86 @@ void initGraphics(int const width, int const height, int const depth)
   g_psx.width = width;
   g_psx.height = height;
   g_psx.depth = depth/COMPRESS_Z;
+  g_psx.p_primitive = NULL;
+  g_psx.p_environment = p_environment;
   
   for(bufIndex = 0; bufIndex < DOUBLE_BUF; bufIndex++)
   {
     g_psx.buffer[bufIndex].p_ot = calloc(g_psx.depth, sizeof(*p_ot));
+    g_psx.buffer[bufIndex].p_ot->data = NULL;
   }
   
   clearVRAM();
   
+  // within the BIOS, if the address 0xBFC7FF52 equals 'E', set it as PAL (1). Otherwise, set it as NTSC (0)
+  switch(*(char *)0xbfc7ff52=='E')
+  {
+    case 'E':
+      SetVideoMode(MODE_PAL); 
+      break;
+    default:
+      SetVideoMode(MODE_NTSC); 
+      break;	
+  }
+  
   ResetCallback();
   ResetGraph(0);
-  
-  for(bufIndex = 0; bufIndex < p_env->bufSize; bufIndex += 2) 
-  {
-    SetDefDispEnv(&g_psx.buffer[bufIndex].disp, 0, 0, g_psx.width, g_psx.height);
-    SetDefDrawEnv(&g_psx.buffer[bufIndex].draw, 0, g_psx.height, g_psx.width, g_psx.height);
-  }
 
-  for(bufIndex = 1; bufIndex < p_env->bufSize; bufIndex += 2)
-  {
-    SetDefDispEnv(&g_psx.buffer[bufIndex].disp, 0, g_psx.height, g_psx.width, g_psx.height);
-    SetDefDrawEnv(&g_psx.buffer[bufIndex].draw, 0, 0, g_psx.width, g_psx.height);
-  }
+  SetDefDispEnv(&g_psx.buffer[bufIndex].disp, 0, 0, g_psx.width, g_psx.height);
+  SetDefDrawEnv(&g_psx.buffer[bufIndex].draw, 0, g_psx.height, g_psx.width, g_psx.height);
+
+  SetDefDispEnv(&g_psx.buffer[bufIndex].disp, 0, g_psx.height, g_psx.width, g_psx.height);
+  SetDefDrawEnv(&g_psx.buffer[bufIndex].draw, 0, 0, g_psx.width, g_psx.height);
   
-  for(bufIndex = 0; bufIndex < p_env->bufSize; bufIndex++)
+  for(bufIndex = 0; bufIndex < DOUBLE_BUF; bufIndex++)
   {
     g_psx.buffer[bufIndex].draw.isbg = 1;
     g_psx.buffer[bufIndex].draw.r0 = 0;
     g_psx.buffer[bufIndex].draw.g0 = 0;
     g_psx.buffer[bufIndex].draw.b0 = 0;
     
-    ClearOTag(g_psx.buffer[bufIndex].p_ot, p_env->depth);
+    ClearOTag(g_psx.buffer[bufIndex].p_ot, g_psx.depth);
   }
   
-  g_psx.curBuffer = g_psx.buffer;
+  g_psx.p_currBuffer = g_psx.buffer;
   
-  FntLoad(960, 256);
-  SetDumpFnt(FntOpen(5, 20, g_psx.width, g_psx.height, 0, 512));
+  #ifdef DEBUG
+    FntLoad(960, 256);
+    SetDumpFnt(FntOpen(5, 20, g_psx.width, g_psx.height, 0, 512));
+  #endif
+    
+  InitGeom();
+  
+  SetGraphDebug(0);
+  
+  SetGeomScreen(g_psx.depth * COMPRESS_Z);
+  
+  SetDispMask(1);
+}
+
+void transform()
+{
   
 }
 
-void graphicsCallback(void *)
+void display()
 {
+  while(DrawSync(1));
   
+  Vsync(0);
+  
+  FntFlush(-1);
+  
+  PutDrawEnv(&g_psx.p_currBuffer->draw);
+  PutDispEnv(&g_psx.p_currBuffer->disp);
+  
+  DrawOTag(&g_psx.p_currBuffer->p_ot);
+  
+  swapBuffers();
+  
+  #ifdef DEBUG
+    FntPrint("%s\n%s\n%X", g_psx.p_environment->message.p_title, g_psx.p_environment->message.p_message, g_psx.p_environment->p_data);
+  #endif
 }
 
 void clearVRAM()
@@ -125,4 +165,9 @@ void clearVRAM()
   ClearImage(&vramArea, 0, 0, 0);
   
   while(DrawSync(1));
+}
+
+void swapBuffers()
+{
+  g_psx.p_currBuffer = (g_psx.p_currBuffer == g_psx.buffer ? g_psx.buffer + 1 : g_psx.buffer);
 }
