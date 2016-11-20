@@ -34,8 +34,6 @@ struct s_gameObject {
   void *p_pointerPoint;
 }
 
-enum objectType {DYNAMIC_TYPE, STATIC_TYPE};
-
 struct s_gameObject *createGameObject(enum objectType type);
 
 void destroyGameObject(struct s_gameObject **gameObject);

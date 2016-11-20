@@ -37,8 +37,6 @@
   #define PROCESS_FAILURE -1
 #endif
 
-#define DOUBLE_BUF 2
-
 #include <stdint.h>
 
 enum en_primType {TYPE_F4, TYPE_FT4, TYPE_G4, TYPE_GT4, TYPE_SPRITE, TYPE_TILE, NO_PRIM};
@@ -86,14 +84,6 @@ struct s_gamePad
 struct s_xmlData
 {
   char string[256];
-};
-
-struct s_psxBuffer
-{
-  struct s_primitive *p_primitive;
-  unsigned long *p_ot;
-//   DISPENV disp;
-//   DRAWENV draw;
 };
 
 struct s_svector
@@ -183,39 +173,6 @@ struct s_object
   } local;
   
   struct s_translation world;
-};
-
-struct s_environment
-{
-  int numObjects;
-  int otSize;
-  
-  struct s_object **pp_objects;
-  
-  struct
-  {
-    struct
-    {
-      struct s_svector origin;
-      struct s_dimensions dimensions;
-    } local;
-    
-    struct s_translation screen;
-    
-  } world;
-  
-  struct s_psxBuffer scrBuf[DOUBLE_BUF];
-  
-  struct s_psxBuffer *p_curScrBuf;
-  
-  struct 
-  {
-    char *p_title;
-    char *p_message;
-    int  *p_data;
-  } envMessage;
-
-  //function pointers for callbacks
 };
 
 #endif

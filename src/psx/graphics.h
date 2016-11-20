@@ -24,21 +24,14 @@
 *
 * Status: v0.0.0 -NADA
 * Previous
-*/
+*/ 
 
-//standard c includes here
+#ifndef _GRAPH_H
+#define _GRAPH_H
 
-#ifndef _ENGINE_H
-#define _ENGINE_H
-
-#include "controller.h"
-#include "gameObject.h"
 #include "types.h"
 
-//setup needed engine requirments
-void initEngine(int const width, int const height, int const depth);
-
-//process callback handlers
-void processEngine();
+void initGraphics(int const width, int const height, int const depth);
+void graphicsCallback(void *);
 
 #endif

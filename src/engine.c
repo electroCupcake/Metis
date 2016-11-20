@@ -26,29 +26,51 @@
 *
 */
 #include "engine.h"
+#include "graphics.h"
 
-struct s_engine *initEngine() 
+struct
 {
-  struct s_engine *engine;
+  int numObjects;
   
-  engine = malloc(sizeof(*engine));
-  
-  if(engine == NULL)
+  struct
   {
-    return NULL;
-  }
+    struct
+    {
+      struct s_object **pp_objects;
+    } local;
+    
+    struct s_translation screen;
+    
+  } world;
   
-  engine.returnValue = 1;
+  struct 
+  {
+    char *p_title;
+    char *p_message;
+    int  *p_data;
+  } envMessage;
   
-  return engine;
+} g_environment;
+
+struct 
+{
+  //function pointers for callbacks
+  void (*graphics)(g_environment *);
+  void (*controllerHandler)(void);
+} g_callbacks;
+
+//setup needed engine requirments
+void initEngine(int const width, int const height, int const depth)
+{
+  memset(&g_environment, 0, sizeof(g_environment));
+  
+  initGraphics(width, height, depth);
+  
+  g_callbacks.graphics = &graphicsCallback;
 }
 
-freeEngine(struct s_engine **engine)
+//process callback handlers
+void processEngine()
 {
-  if(engine == NULL)
-  {
-    return;
-  }
-  
-  free(*engine);
+  g_callbacks.graphics(&g_environment);
 }

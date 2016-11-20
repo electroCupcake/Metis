@@ -24,23 +24,6 @@
 *
 * Status: v0.0.0 -NADA
 * Previous
-*/
+*/ 
 
-#ifndef _GRAPHICS_H
-#define _GRAPHICS_H
-
-#include "gameObject.h"
-#include "engine.h"
-
-int setGraphicsObject(struct s_gameObject *gameObject);
-
-int attachGraphics(struct s_gameObject *gameObject);
-
-int setBackground(struct s_gameObject *gameObject, void *background);
-
-int setEngine(struct s_engine *engine);
-
-int updateDisplay();
-
-#endif
-
+#include "controller.h"

@@ -24,21 +24,10 @@
 *
 * Status: v0.0.0 -NADA
 * Previous
-*/
+*/ 
 
-//standard c includes here
+#ifndef _FILEIO_H
+#define _FILEIO_H
 
-#ifndef _ENGINE_H
-#define _ENGINE_H
-
-#include "controller.h"
-#include "gameObject.h"
-#include "types.h"
-
-//setup needed engine requirments
-void initEngine(int const width, int const height, int const depth);
-
-//process callback handlers
-void processEngine();
 
 #endif

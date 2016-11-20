@@ -19,36 +19,14 @@
 * The full License is located in the root directory of this project, named LICENSE.txt.
 *
 * Developed By: John Convertino
-* 
-* See Header for information about this source file.
-* 
-* Version: v0.0.0
 *
-*/
+* INFORMATION ABOUT THE HEADER AND ITS CONTENTS (WHAT IT ALLOWS YOU TO    * DO).
+*
+* Status: v0.0.0 -NADA
+* Previous
+*/ 
 
-#include "graphics.h"
+#ifndef _CONTROL_H
+#define _CONTROL_H
 
-int setGraphicsObject(struct s_gameObject *gameObject)
-{
-  return 0;
-}
-
-int attachGraphics(struct s_gameObject *gameObject)
-{
-  return 0;
-}
-
-int setBackground(struct s_gameObject *gameObject, void *background)
-{
-  return 0;
-}
-
-int setEngine(struct s_engine *engine)
-{
-  return 0;
-}
-
-int updateDisplay()
-{
-  return 0;
-}
+#endif
