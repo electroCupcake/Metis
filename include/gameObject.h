@@ -29,13 +29,14 @@
 #ifndef _GAME_OBJECT_H
 #define _GAME_OBJECT_H
 
-struct s_gameObject {
-  int returnValue;
-  void *p_pointerPoint;
-}
+#include "types.h"
 
-struct s_gameObject *createGameObject(enum objectType type);
+void initGameObject(struct s_environment *p_environment);
 
-void destroyGameObject(struct s_gameObject **gameObject);
+struct s_gameObject *createGameObject(char *p_fname);
+
+void loadGameObjectTexture(struct s_gameObject *p_gameObject);
+
+void destroyGameObject(struct s_gameObject **pp_gameObject);
 
 #endif

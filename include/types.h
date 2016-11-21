@@ -196,7 +196,12 @@ struct s_environment
     char *p_message;
     int  *p_data;
   } message;
-  
+};
+
+struct s_gameObject 
+{
+  char file[256];
+  struct s_object *p_data;
 };
 
 #endif

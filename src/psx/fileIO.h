@@ -30,9 +30,9 @@
 #define _FILEIO_H
 
 //load a data from CD, returns address pointer in memory.
-void loadObjectData(char *p_fname, char *op_data, uint32_t *op_len);
+void loadObjectData(char *p_fname, char **op_data, uint32_t *op_len);
 //read from the memory card and return pointer to data
-void loadSaveData(char *p_fname, char *op_data, uint32_t len);
+void loadSaveData(char *p_fname, char **op_data, uint32_t len);
 //write to the memory card using data passed to it.
 void saveSaveData(char *p_fname, char *ip_data, uint32_t len);
 

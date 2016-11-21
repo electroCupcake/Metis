@@ -40,9 +40,11 @@ void initEngine(int const width, int const height, int const depth)
   initGraphics(width, height, depth, &g_environment);
   
   initController();
+  
+  initGameObject(&g_environment);
 }
 
-//process callback handlers
+//process engine
 void processEngine()
 {
   processControllers();

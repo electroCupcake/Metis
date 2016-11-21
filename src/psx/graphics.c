@@ -133,7 +133,7 @@ void initGraphics(int const width, int const height, int const depth, struct s_e
 
 void transform()
 {
-  
+  //calculation from local to world to screen for each object done here
 }
 
 void display()
