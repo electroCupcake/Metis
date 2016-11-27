@@ -26,18 +26,16 @@
 * Previous
 */
 
-#ifndef _OBJECT_BUILDER_H
-#define _OBJECT_BUILDER_H
+#ifndef _WORLD_BUILDER_H
+#define _WORLD_BUILDER_H
 
 #include "types.h"
 
-//use this to setup xml, but if your using the world builder only call one or the other init
-void initObjectBuilder();
+//use this to setup xml, but if your using the object builder only call one or the other init
+void initWorldBuilder();
 
 //parse the data
-struct s_object *getObject(char const *p_objectData);
+void getWorld(char const *p_worldData);
 
-//free the primitive struct this library returns (will also free texture data if it is allocated).
-void freeObject(struct s_object **pp_object);
 
-#endif
+#endif 

@@ -27,12 +27,9 @@
 */
 
 #include "objectBuilder.h"
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <yxml.h>
+#include <buildUtil.h>
 
-#define DEFAULT_BUFSIZE 2048
+
 //defines of names for xmltypes
 #define XML_TYPE_NAME "primtype"
 #define XML_TYPE_OBJ  "objecttype"
@@ -58,111 +55,27 @@
 #define XML_WORLD     "world"
 #define XML_FILE      "file"
 
-//holds data relating to xml parsing
-struct
-{
-  int bufSize;
-  char stringBuffer[256];
-  
-  yxml_t yxml;
-  
-  char p_stack[DEFAULT_BUFSIZE];
-  char const *p_xmlData;
-  char const *p_xmlDataBlock;
-  char const *p_xmlDataStart;
-  
-} g_parserData;
-
 static int sg_id = 0;
 
 struct s_objectLookup objectLookup[] = {{PLAYER, "PLAYER"}, {ENEMY, "ENEMY"}, {FRIEND, "FRIEND"}, {STATIC, "STATIC"}, {MOVABLE, "MOVABLE"}, {NO_OBJ, "END"}};
 struct s_primLookup primLookup[] = {{TYPE_F4, "TYPE_F4"}, {TYPE_FT4, "TYPE_FT4"}, {TYPE_G4, "TYPE_G4"}, {TYPE_GT4, "TYPE_GT4"}, {TYPE_SPRITE, "TYPE_SPRITE"}, {TYPE_TILE, "TYPE_TILE"}, {NO_PRIM, "END"}};
 
-//utility functions
-//finds the attribute and stores the result in stringBuffer, returns 0 if found, -1 if not
-int findXMLattr(char const * const p_attr);
-//finds the element and stores the result in stringBuffer, returns 0 if found, -1 if not
-int findXMLelem(char const * const p_elem);
-//finds an element name that starts a block of data, returns 0 if found , -1 if not
-int findXMLblock(char const * const p_block);
-//gets content if attribute or element is found, puts data in stringBuffer, returns 0 if found, -1 if not
-int getXMLcontent();
-//finds short vector data out of the xml, 0 if found, -1 if not found
-int findSVector(struct s_svector *p_vector, char const * const p_vectorName);
-//finds long vector data out of the xml, 0 if found, -1 if not found
-int findLVector(struct s_lvector *p_vector, char const * const p_vectorName);
-//finds color data out of the xml, 0 if found, -1 if not found
-int findColor(struct s_color *color, char const * const p_colorName);
-//sets the current block data pointer so we can loop within the same block of data
-void setXMLblock();
-//reset data back to start, allows data to be in any order
-void resetXMLstart();
-//reset data back to where setXMLblock was last called, allows a block to be searched in its range
-void resetXMLblock();
-
-//setup get prim data
+//use this to setup xml, but if your using the world builder only call one or the other init
 void initObjectBuilder()
 {
-  g_parserData.p_xmlData = NULL;
-  g_parserData.p_xmlDataStart = NULL;
-  
-  g_parserData.bufSize = DEFAULT_BUFSIZE;
-  
-  memset(g_parserData.stringBuffer, 0, 256);
-  
-  yxml_init(&g_parserData.yxml, g_parserData.p_stack, g_parserData.bufSize);
-}
-
-//reset get prim
-int resetObjectBuilder()
-{
-  memset(g_parserData.stringBuffer, 0, 256);
-  
-  memset(&g_parserData.yxml, 0, sizeof(g_parserData.yxml));
-  
-  memset(g_parserData.p_stack, 0, g_parserData.bufSize);
-  
-  yxml_init(&g_parserData.yxml, g_parserData.p_stack, g_parserData.bufSize);
-  
-  resetXMLstart();
-}
-
-//free data
-void freeObject(struct s_object **pp_object)
-{
-  if(pp_object != NULL)
-  {
-    if((*pp_object)->local.p_texture != NULL)
-    {
-      if((*pp_object)->local.p_texture->p_data != NULL)
-      {
-	free((*pp_object)->local.p_texture->p_data);
-      }
-      
-      free((*pp_object)->local.p_texture);
-    }
-    
-    free(*pp_object);
-  }
-}
-
-//set pointer to data (loaded into pointer else where)
-void setXMLdata(char const *p_xmlData)
-{
-  if(p_xmlData != NULL)
-  {
-    g_parserData.p_xmlData = p_xmlData;
-    g_parserData.p_xmlDataStart = p_xmlData;
-  }
+  initBuildUtil();
 }
 
 //get prim data (parse xml)
-struct s_object *getObject()
+struct s_object *getObject(char const *p_objectData)
 {
   int index;
   int returnValue = 0;
   
   struct s_object *p_object;
+  
+  resetBuildUtil();
+  setXMLdata(p_objectData);
   
   if(g_parserData.p_xmlData == NULL)
   {
@@ -347,284 +260,21 @@ struct s_object *getObject()
   return p_object;
 }
 
-//find attributes
-int findXMLattr(char const * const p_attr)
+//free data
+void freeObject(struct s_object **pp_object)
 {
-  yxml_ret_t yxmlState;
-  
-  do
+  if(pp_object != NULL)
   {
-    yxmlState = yxml_parse(&g_parserData.yxml, *g_parserData.p_xmlData);
-    
-    switch(yxmlState)
+    if((*pp_object)->local.p_texture != NULL)
     {
-      case YXML_ATTRSTART:
-	if(strcmp(g_parserData.yxml.attr, p_attr) == 0)
-	{
-	  return getXMLcontent();
-	}
-	break;
-      default:
-	break;
-    }
-    g_parserData.p_xmlData++;
-  }
-  while(*g_parserData.p_xmlData);
-  
-  return PROCESS_FAILURE;
-}
-
-//find elements
-int findXMLelem(char const * const p_elem)
-{
-  yxml_ret_t yxmlState;
-  
-  do
-  {
-    yxmlState = yxml_parse(&g_parserData.yxml, *g_parserData.p_xmlData);
-    
-    switch(yxmlState)
-    {
-      case YXML_ELEMSTART:
-	if(strcmp(g_parserData.yxml.elem, p_elem) == 0)
-	{
-	  return getXMLcontent();
-	}
-	break;
-      default:
-	break;
-    }
-    g_parserData.p_xmlData++;
-  }
-  while(*g_parserData.p_xmlData);
-  
-  return PROCESS_FAILURE;
-}
-
-//find element blocks
-int findXMLblock(char const * const p_block)
-{
-  yxml_ret_t yxmlState;
-
-  do
-  {
-    yxmlState = yxml_parse(&g_parserData.yxml, *g_parserData.p_xmlData);
-    
-    switch(yxmlState)
-    {
-      case YXML_ELEMSTART:
-	if(strcmp(g_parserData.yxml.elem, p_block) == 0)
-	{
-	  return PROCESS_SUCCESS;
-	}
-	break;
-      default:
-	break;
-    }
-    g_parserData.p_xmlData++;
-  }
-  while(*g_parserData.p_xmlData);
-  
-  return PROCESS_FAILURE;
-}
-
-//get content when a element match is found (or attribute).
-int getXMLcontent()
-{
-  int len = 0;
-  int index = 0;
-  yxml_ret_t yxmlState;
-
-  memset(g_parserData.stringBuffer, 0, 256);
-  
-  do
-  {
-    yxmlState = yxml_parse(&g_parserData.yxml, *g_parserData.p_xmlData);
-    
-    switch(yxmlState)
-    {
-      case YXML_ATTRVAL:
-      case YXML_CONTENT:
-	switch(g_parserData.yxml.data[0])
-	{
-	  case '\n':
-	  case '>':
-	  case '<':
-	    break;
-	  default:
-	    g_parserData.stringBuffer[index] = g_parserData.yxml.data[0];
-	    
-	    index++;
-	    
-	    if(index >= 256)
-	    {
-	      return PROCESS_FAILURE;
-	    }
-	    break;
-	}
-	break;
-      case YXML_ATTREND:
-      case YXML_ELEMEND:
-	return PROCESS_SUCCESS;
-	break;
-      default:
-	break;
+      if((*pp_object)->local.p_texture->p_data != NULL)
+      {
+	free((*pp_object)->local.p_texture->p_data);
+      }
+      
+      free((*pp_object)->local.p_texture);
     }
     
-    g_parserData.p_xmlData++;
+    free(*pp_object);
   }
-  while(*g_parserData.p_xmlData);
-    
-  return PROCESS_FAILURE;
-}
-
-//find short vector data, helps since this needs to happen 4 or more times
-int findSVector(struct s_svector *p_vector, char const * const p_vectorName)
-{
-  if(findXMLblock(p_vectorName) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
- 
-  setXMLblock();
- 
-  if(findXMLelem(XML_X_CORR) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
-  
-  p_vector->vx = atoi(g_parserData.stringBuffer);
-  
-  resetXMLblock();
-  
-  if(findXMLelem(XML_Y_CORR) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
-  
-  p_vector->vy = atoi(g_parserData.stringBuffer);
-  
-  resetXMLblock();
-  
-  if(findXMLelem(XML_Z_CORR) < 0)
-  {
-    p_vector->vz = 0; 
-  }
-  else
-  {
-    p_vector->vz = atoi(g_parserData.stringBuffer);
-  }
-  
-  resetXMLblock();
-  
-  return PROCESS_SUCCESS;
-}
-
-//find long vector data, helps since this needs to happen 4 or more times
-int findLVector(struct s_lvector *p_vector, char const * const p_vectorName)
-{
-  if(findXMLblock(p_vectorName) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
- 
-  setXMLblock();
- 
-  if(findXMLelem(XML_X_CORR) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
-  
-  p_vector->vx = atoi(g_parserData.stringBuffer);
-  
-  resetXMLblock();
-  
-  if(findXMLelem(XML_Y_CORR) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
-  
-  p_vector->vy = atoi(g_parserData.stringBuffer);
-  
-  resetXMLblock();
-  
-  if(findXMLelem(XML_Z_CORR) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
-
-  p_vector->vz = atoi(g_parserData.stringBuffer);
-
-  resetXMLblock();
-  
-  return PROCESS_SUCCESS;
-}
-
-//find color data, helps since this happens 4 or more times
-int findColor(struct s_color *color, char const * const p_colorName)
-{
-  if(findXMLblock(p_colorName) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
- 
-  setXMLblock();
- 
-  if(findXMLelem(XML_RED) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
-  
-  color->r = atoi(g_parserData.stringBuffer);
-  
-  resetXMLblock();
-  
-  if(findXMLelem(XML_GREEN) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
-  
-  color->g = atoi(g_parserData.stringBuffer);
-  
-  resetXMLblock();
-  
-  if(findXMLelem(XML_BLUE) < 0)
-  {
-    resetXMLstart();
-    return PROCESS_FAILURE;
-  }
-  
-  color->b = atoi(g_parserData.stringBuffer);
-  
-  resetXMLblock();
-  
-  return PROCESS_SUCCESS;
-}
-
-//set xml block pointer to current spot
-void setXMLblock()
-{
-  g_parserData.p_xmlDataBlock = g_parserData.p_xmlData;
-}
-
-//reset current pointer to start of xml data
-void resetXMLstart()
-{ 
-  setXMLdata(g_parserData.p_xmlDataStart);
-}
-
-//reset current pointer back to last setXMLblock call
-void resetXMLblock()
-{
-  g_parserData.p_xmlData = g_parserData.p_xmlDataBlock;
 }
