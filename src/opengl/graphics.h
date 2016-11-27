@@ -24,19 +24,18 @@
 *
 * Status: v0.0.0 -NADA
 * Previous
-*/
+*/ 
 
-#include "worldBuilder.h"
-#include <buildUtil.h>
+#ifndef _GRAPH_H
+#define _GRAPH_H
 
-//use this to setup xml, but if your using the object builder only call one or the other init
-void initWorldBuilder()
-{
-  initBuildUtil();
-}
+#include "types.h"
 
-//parse the data
-void buildWorld(char const *p_worldData)
-{
-  return;
-}
+//need a method of loading textures to be used in gameObject
+
+void initGraphics(int const width, int const height, int const depth, struct s_environment *p_environment);
+void populateOT();
+void transform();
+void display();
+
+#endif

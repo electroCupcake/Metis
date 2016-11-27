@@ -27,9 +27,16 @@
 */
 
 #include "buildUtil.h"
-#include <types.h>
+
 
 #define DEFAULT_BUFSIZE 2048
+
+#define XML_RED	      "red"
+#define XML_GREEN     "green"
+#define XML_BLUE      "blue"
+#define XML_X_CORR    "x"
+#define XML_Y_CORR    "y"
+#define XML_Z_CORR    "z"
 
 //holds data relating to xml parsing
 struct
@@ -74,13 +81,17 @@ int resetBuildUtil()
 }
 
 //set pointer to data (loaded into pointer else where)
-void setXMLdata(char const *p_xmlData)
+int setXMLdata(char const *p_xmlData)
 {
-  if(p_xmlData != NULL)
+  if(p_xmlData == NULL)
   {
-    g_parserData.p_xmlData = p_xmlData;
-    g_parserData.p_xmlDataStart = p_xmlData;
+    return PROCESS_FAILURE;
   }
+  
+  g_parserData.p_xmlData = p_xmlData;
+  g_parserData.p_xmlDataStart = p_xmlData;
+  
+  return PROCESS_SUCCESS;
 }
 
 //find attributes
@@ -212,6 +223,11 @@ int getXMLcontent()
   while(*g_parserData.p_xmlData);
     
   return PROCESS_FAILURE;
+}
+
+char *getStringBuf()
+{
+  return g_parserData.stringBuffer;
 }
 
 //find short vector data, helps since this needs to happen 4 or more times

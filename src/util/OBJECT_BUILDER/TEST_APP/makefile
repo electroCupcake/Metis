@@ -1,7 +1,7 @@
-SOURCES = main.c ../objectBuilder.c
+SOURCES = main.c ../objectBuilder.c ../../BUILD_UTIL/buildUtil.c
 EXE = OBJ_TEST
 CC = gcc
-CFLAGS = -I  ../../../../include -I ../ -I ../../YXML_PSYQ_PORT
+CFLAGS = -I  ../../../../include -I ../ -I ../../YXML_PSYQ_PORT -I ../../BUILD_UTIL
 LFLAGS = -L ../../YXML_PSYQ_PORT/ -l yxml
 OBJECTS = $(SOURCES:.c=.o)
 

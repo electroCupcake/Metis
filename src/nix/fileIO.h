@@ -24,19 +24,16 @@
 *
 * Status: v0.0.0 -NADA
 * Previous
-*/
+*/ 
 
-#include "worldBuilder.h"
-#include <buildUtil.h>
+#ifndef _FILEIO_H
+#define _FILEIO_H
 
-//use this to setup xml, but if your using the object builder only call one or the other init
-void initWorldBuilder()
-{
-  initBuildUtil();
-}
+//load a data from Files, returns address pointer in memory.
+void loadObjectData(char *p_fname, char **op_data, uint32_t *op_len);
+//read from the memory card and return pointer to data
+void loadSaveData(char *p_fname, char **op_data, uint32_t len);
+//write to the memory card using data passed to it.
+void saveSaveData(char *p_fname, char *ip_data, uint32_t len);
 
-//parse the data
-void buildWorld(char const *p_worldData)
-{
-  return;
-}
+#endif

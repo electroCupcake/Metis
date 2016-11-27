@@ -24,19 +24,27 @@
 *
 * Status: v0.0.0 -NADA
 * Previous
-*/
+*/ 
 
-#include "worldBuilder.h"
-#include <buildUtil.h>
+#include "graphics.h"
 
-//use this to setup xml, but if your using the object builder only call one or the other init
-void initWorldBuilder()
+void initGraphics(int const width, int const height, int const depth, struct s_environment *p_environment)
 {
-  initBuildUtil();
+  return;
 }
 
-//parse the data
-void buildWorld(char const *p_worldData)
+//populateOT via add prim
+void populateOT(struct s_object *p_object)
+{
+  return;
+}
+
+void transform()
+{
+  return;
+}
+
+void display()
 {
   return;
 }

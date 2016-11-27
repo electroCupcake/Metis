@@ -38,16 +38,10 @@
 #define XML_VECTOR_2  "vector2"
 #define XML_VECTOR_3  "vector3"
 #define XML_VRAM      "vramVector"
-#define XML_X_CORR    "x"
-#define XML_Y_CORR    "y"
-#define XML_Z_CORR    "z"
 #define XML_COLOR_0   "color0"
 #define XML_COLOR_1   "color1"
 #define XML_COLOR_2   "color2"
 #define XML_COLOR_3   "color3"
-#define XML_RED	      "red"
-#define XML_GREEN     "green"
-#define XML_BLUE      "blue"
 #define XML_WIDTH     "width"
 #define XML_HEIGHT    "height"
 #define XML_TEXTURE   "texture"
@@ -75,9 +69,9 @@ struct s_object *getObject(char const *p_objectData)
   struct s_object *p_object;
   
   resetBuildUtil();
-  setXMLdata(p_objectData);
+  returnValue = setXMLdata(p_objectData);
   
-  if(g_parserData.p_xmlData == NULL)
+  if(returnValue == PROCESS_FAILURE)
   {
     #ifdef DEBUG
       printf("\nXML DATA NULL\n");
@@ -110,7 +104,7 @@ struct s_object *getObject(char const *p_objectData)
   
   for(index = 0; strcmp(primLookup[index].p_string, "END") != 0; index++)
   {
-    if(strcmp(primLookup[index].p_string, g_parserData.stringBuffer) == 0)
+    if(strcmp(primLookup[index].p_string, getStringBuf()) == 0)
     {
       p_object->primType = primLookup[index].type;
       break;
@@ -129,7 +123,7 @@ struct s_object *getObject(char const *p_objectData)
   
   for(index = 0; strcmp(objectLookup[index].p_string, "END") != 0; index++)
   {
-    if(strcmp(objectLookup[index].p_string, g_parserData.stringBuffer) == 0)
+    if(strcmp(objectLookup[index].p_string, getStringBuf()) == 0)
     {
       p_object->objectType = objectLookup[index].type;
       break;
@@ -219,7 +213,7 @@ struct s_object *getObject(char const *p_objectData)
 	return NULL;
       }
       
-      strcpy(p_object->local.p_texture->file, g_parserData.stringBuffer);
+      strcpy(p_object->local.p_texture->file, getStringBuf());
     }
 
     resetXMLstart();
@@ -250,10 +244,6 @@ struct s_object *getObject(char const *p_objectData)
     
     resetXMLstart();
   }
-  
-  p_object->world.scaleCoor.vx = ONE;
-  p_object->world.scaleCoor.vy = ONE;
-  p_object->world.scaleCoor.vz = ONE;
   
   p_object->id = sg_id++;
   

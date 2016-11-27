@@ -35,7 +35,7 @@
 void initWorldBuilder();
 
 //parse the data
-void getWorld(char const *p_worldData);
+void buildWorld(char const *p_worldData);
 
 
 #endif 

@@ -29,6 +29,7 @@
 #ifndef _BUILD_UTIL_H
 #define _BUILD_UTIL_H
 
+#include "types.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -39,7 +40,7 @@ void initBuildUtil();
 //reset get prim
 int resetBuildUtil();
 //set xml data pointer to use for data extraction 
-void setXMLdata(char const *p_xmlData);
+int setXMLdata(char const *p_xmlData);
 //finds the attribute and stores the result in stringBuffer, returns 0 if found, -1 if not
 int findXMLattr(char const * const p_attr);
 //finds the element and stores the result in stringBuffer, returns 0 if found, -1 if not
@@ -48,6 +49,8 @@ int findXMLelem(char const * const p_elem);
 int findXMLblock(char const * const p_block);
 //gets content if attribute or element is found, puts data in stringBuffer, returns 0 if found, -1 if not
 int getXMLcontent();
+//get string buffer contents
+char *getStringBuf();
 //finds short vector data out of the xml, 0 if found, -1 if not found
 int findSVector(struct s_svector *p_vector, char const * const p_vectorName);
 //finds long vector data out of the xml, 0 if found, -1 if not found

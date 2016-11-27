@@ -33,14 +33,12 @@ int main()
   p_buffer = malloc(ONE_MB);
   
   initObjectBuilder();
-
-  setXMLdata(p_buffer);
   
   do
   {
     len = fread(p_buffer, sizeof(uint8_t), ONE_MB, fdREAD);
 
-    p_object = getObject();
+    p_object = getObject(p_buffer);
     
     if(p_object != NULL)
     {

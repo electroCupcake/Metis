@@ -24,19 +24,28 @@
 *
 * Status: v0.0.0 -NADA
 * Previous
-*/
+*/ 
 
-#include "worldBuilder.h"
-#include <buildUtil.h>
+#include "controller.h"
 
-//use this to setup xml, but if your using the object builder only call one or the other init
-void initWorldBuilder()
+#define MAX_PLAYERS 2
+
+void initController()
 {
-  initBuildUtil();
+  return;
 }
 
-//parse the data
-void buildWorld(char const *p_worldData)
+void registerControllerOne(void (*movement)(struct s_gamePad gamePad, struct s_object *p_object), struct s_object *p_object)
+{
+  return;
+}
+
+void registerControllerTwo(void (*movement)(struct s_gamePad gamePad, struct s_object *p_object), struct s_object *p_object)
+{
+  return;
+}
+
+void processControllers()
 {
   return;
 }
