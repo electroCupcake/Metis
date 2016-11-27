@@ -1,6 +1,6 @@
 /*
 * Metis 2D Game Engine
-* 2016 John Convertino, Jeff Eckert
+* 2016 John Convertino
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -18,22 +18,24 @@
 *
 * The full License is located in the root directory of this project, named LICENSE.txt.
 *
-* Developed By: John Convertino, Jeff Eckert
-* 
-* See Header for information about this source file.
-* 
-* Version: v0.0.0
+* Developed By: John Convertino
 *
-*/
+* INFORMATION ABOUT THE HEADER AND ITS CONTENTS (WHAT IT ALLOWS YOU TO    * DO).
+*
+* Status: v0.0.0 -NADA
+* Previous
+*/ 
 
-#include "ai.h"
+#ifndef _GRAPH_H
+#define _GRAPH_H
 
-struct s_ai *createAI()
-{
-  return NULL;
-}
+#include "types.h"
 
-int getBehaivor(struct s_ai * const ai, enum aiType type)
-{
-  return 0;
-}
+//need a method of loading textures to be used in gameObject
+
+void initGraphics(int const width, int const height, int const depth, struct s_environment *p_environment);
+void populateOT();
+void transform();
+void display();
+
+#endif

@@ -1,6 +1,6 @@
 /*
 * Metis 2D Game Engine
-* 2016 John Convertino, Jeff Eckert
+* 2016 John Convertino
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 *
 * The full License is located in the root directory of this project, named LICENSE.txt.
 *
-* Developed By: John Convertino, Jeff Eckert
+* Developed By: John Convertino
 * 
 * See Header for information about this source file.
 * 
@@ -26,29 +26,35 @@
 *
 */
 #include "engine.h"
+#include "controller.h"
+#include "gameObject.h"
+#include "graphics.h"
 
-struct s_engine *initEngine() 
+struct s_environment g_environment;
+
+//setup needed engine requirments
+void initEngine(int const width, int const height, int const depth)
 {
-  struct s_engine *engine;
+  memset(&g_environment, 0, sizeof(g_environment));
   
-  engine = malloc(sizeof(*engine));
+  //allocate in future to world size of objects, for now, just allocate to 128 to be greater than the intended example
+  g_environment.world.local.pp_objects = calloc(128, sizeof(s_object));
   
-  if(engine == NULL)
-  {
-    return NULL;
-  }
+  g_environment.numObjects = 128;
   
-  engine.returnValue = 1;
+  initGraphics(width, height, depth, &g_environment);
   
-  return engine;
+  initController();
+  
+  initGameObject();
 }
 
-freeEngine(struct s_engine **engine)
+//process engine
+void processEngine()
 {
-  if(engine == NULL)
-  {
-    return;
-  }
+  processControllers();
   
-  free(*engine);
+  transform();
+  
+  display();
 }

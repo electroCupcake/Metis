@@ -1,6 +1,6 @@
 /*
 * Metis 2D Game Engine
-* 2016 John Convertino, Jeff Eckert
+* 2016 John Convertino
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 *
 * The full License is located in the root directory of this project, named LICENSE.txt.
 *
-* Developed By: John Convertino, Jeff Eckert
+* Developed By: John Convertino
 *
 * INFORMATION ABOUT THE HEADER AND ITS CONTENTS (WHAT IT ALLOWS YOU TO    * DO).
 *
@@ -26,19 +26,17 @@
 * Previous
 */
 
-#include "gameObject.h"
+#include "worldBuilder.h"
+#include <buildUtil.h>
 
-enum inputStates {UP = 2, DOWN = 4, LEFT = 8, RIGHT = 16};
-
-enum playerType {AI, PLAYER};
-
-struct s_controller {
-  int returnValue;
-  void *p_pointerPoint;
+//use this to setup xml, but if your using the object builder only call one or the other init
+void initWorldBuilder()
+{
+  initBuildUtil();
 }
 
-struct s_controller *createController(int playerNumber);
-
-int attachController(struct s_gameObject gameObject);
-
-int setupController(struct s_gameObject gameObject, enum playerType type, void *map);
+//parse the data
+void getWorld(char const *p_worldData)
+{
+  return;
+}

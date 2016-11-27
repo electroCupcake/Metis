@@ -1,6 +1,6 @@
 /*
 * Metis 2D Game Engine
-* 2016 John Convertino, Jeff Eckert
+* 2016 John Convertino
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 *
 * The full License is located in the root directory of this project, named LICENSE.txt.
 *
-* Developed By: John Convertino, Jeff Eckert
+* Developed By: John Convertino
 * 
 * See Header for information about this source file.
 * 
@@ -27,13 +27,101 @@
 */
 
 #include "gameObject.h"
+#include "objectBuilder.h"
+#include "graphics.h"
+#include "fileIO.h"
 
-struct s_gameObject *createGameObject(enum objectType type)
+//add utility function to add a object to the list of object
+//consider a new data type like a stack
+void pushObject(struct s_object *p_object);
+
+void initGameObject()
 {
-  return NULL;
+  if(p_environment == NULL)
+  {
+    #ifdef DEBUG
+      printf("\nENVIRONMENT NULL\n");
+    #endif
+    return;
+  }
+  
+  initObjectBuilder();
 }
 
-void destroyGameObject(struct s_gameObject **gameObject)
+struct s_gameObject *createGameObject(char *p_fname)
 {
-  return;
+  uint32_t len = 0;
+  
+  char *p_data = NULL;
+  struct s_gameObject *p_gameObject = NULL;
+  
+  if(p_fname == NULL)
+  {
+    #ifdef DEBUG
+      printf("\nFILE NAME NULL\n");
+    #endif
+    return NULL;
+  }
+  
+  loadObjectData(p_fname, &p_data, &len);
+  
+  if(p_data == NULL)
+  {
+    #ifdef DEBUG
+      printf("\nDATA FAILURE\n");
+    #endif
+    return NULL;
+  }
+  
+  p_gameObject = malloc(sizeof(*p_gameObject));
+  
+  if(p_gameObject == NULL)
+  {
+    #ifdef DEBUG
+      printf("\nMALLOC FAILURE\n");
+    #endif
+    return NULL;
+  }
+  
+  p_gameObject->p_data = NULL;
+  
+  strcpy(p_gameObject->file, p_fname);
+  
+  resetObjectBuilder();
+  
+  setXMLdata(p_data);
+  
+  p_gameObject->p_data = getObject();
+  
+  if(p_gameObject->p_data == NULL)
+  {
+    #ifdef DEBUG
+      printf("\nGET OBJECT DATA FAIL\n");
+    #endif
+    return NULL;
+  }
+  
+  //add object to environment here, we give this back to the caller so it can be attached if needed, or safely ignored.
+  populateOT(p_gameObject);
+  
+  return p_gameObject;
+}
+
+//texture loading
+void loadGameObjectTexture(struct s_gameObject *p_gameObject)
+{
+  
+}
+
+void destroyGameObject(struct s_gameObject **pp_gameObject)
+{
+  if(pp_gameObject != NULL)
+  {
+    if((*pp_gameObject)->p_data != NULL)
+    {
+      freeObject(&(*pp_gameObject)->p_data);
+    }
+    
+    free(*pp_gameObject);
+  }
 }

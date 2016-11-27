@@ -1,6 +1,6 @@
 /*
 * Metis 2D Game Engine
-* 2016 John Convertino, Jeff Eckert
+* 2016 John Convertino
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -18,37 +18,26 @@
 *
 * The full License is located in the root directory of this project, named LICENSE.txt.
 *
-* Developed By: John Convertino, Jeff Eckert
-* 
-* See Header for information about this source file.
-* 
-* Version: v0.0.0
+* Developed By: John Convertino
 *
+* INFORMATION ABOUT THE HEADER AND ITS CONTENTS (WHAT IT ALLOWS YOU TO    * DO).
+*
+* Status: v0.0.0 -NADA
+* Previous
 */
 
-#include "graphics.h"
+#ifndef _OBJECT_BUILDER_H
+#define _OBJECT_BUILDER_H
 
-int setGraphicsObject(struct s_gameObject *gameObject)
-{
-  return 0;
-}
+#include "types.h"
 
-int attachGraphics(struct s_gameObject *gameObject)
-{
-  return 0;
-}
+//use this to setup xml, but if your using the world builder only call one or the other init
+void initObjectBuilder();
 
-int setBackground(struct s_gameObject *gameObject, void *background)
-{
-  return 0;
-}
+//parse the data
+struct s_object *getObject(char const *p_objectData);
 
-int setEngine(struct s_engine *engine)
-{
-  return 0;
-}
+//free the primitive struct this library returns (will also free texture data if it is allocated).
+void freeObject(struct s_object **pp_object);
 
-int updateDisplay()
-{
-  return 0;
-}
+#endif
