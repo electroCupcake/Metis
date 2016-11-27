@@ -37,11 +37,16 @@ void initEngine(int const width, int const height, int const depth)
 {
   memset(&g_environment, 0, sizeof(g_environment));
   
+  //allocate in future to world size of objects, for now, just allocate to 128 to be greater than the intended example
+  g_environment.world.local.pp_objects = calloc(128, sizeof(s_object));
+  
+  g_environment.numObjects = 128;
+  
   initGraphics(width, height, depth, &g_environment);
   
   initController();
   
-  initGameObject(&g_environment);
+  initGameObject();
 }
 
 //process engine
@@ -49,7 +54,7 @@ void processEngine()
 {
   processControllers();
   
-  translate();
+  transform();
   
   display();
 }

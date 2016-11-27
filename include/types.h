@@ -154,6 +154,7 @@ struct s_translation
 
 struct s_object
 {
+  int id;
   enum en_primType primType;
   enum en_objectType objectType;
   

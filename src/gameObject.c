@@ -28,27 +28,24 @@
 
 #include "gameObject.h"
 #include "objectBuilder.h"
+#include "graphics.h"
 #include "fileIO.h"
 
 //add utility function to add a object to the list of object
 //consider a new data type like a stack
 void pushObject(struct s_object *p_object);
 
-struct s_environment *gp_environment = NULL;
-
-void initGameObject(struct s_environment *p_environment)
+void initGameObject()
 {
   if(p_environment == NULL)
   {
     #ifdef DEBUG
-      prinf("\nENVIRONMENT NULL\n");
+      printf("\nENVIRONMENT NULL\n");
     #endif
     return;
   }
   
   initObjectBuilder();
-  
-  gp_environment = p_environment;
 }
 
 struct s_gameObject *createGameObject(char *p_fname)
@@ -105,6 +102,7 @@ struct s_gameObject *createGameObject(char *p_fname)
   }
   
   //add object to environment here, we give this back to the caller so it can be attached if needed, or safely ignored.
+  populateOT(p_gameObject);
   
   return p_gameObject;
 }

@@ -31,7 +31,7 @@
 
 #include "types.h"
 
-void initGameObject(struct s_environment *p_environment);
+void initGameObject();
 
 struct s_gameObject *createGameObject(char *p_fname);
 

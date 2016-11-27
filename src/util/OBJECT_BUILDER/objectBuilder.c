@@ -73,6 +73,8 @@ struct
   
 } g_parserData;
 
+static int sg_id = 0;
+
 struct s_objectLookup objectLookup[] = {{PLAYER, "PLAYER"}, {ENEMY, "ENEMY"}, {FRIEND, "FRIEND"}, {STATIC, "STATIC"}, {MOVABLE, "MOVABLE"}, {NO_OBJ, "END"}};
 struct s_primLookup primLookup[] = {{TYPE_F4, "TYPE_F4"}, {TYPE_FT4, "TYPE_FT4"}, {TYPE_G4, "TYPE_G4"}, {TYPE_GT4, "TYPE_GT4"}, {TYPE_SPRITE, "TYPE_SPRITE"}, {TYPE_TILE, "TYPE_TILE"}, {NO_PRIM, "END"}};
 
@@ -335,6 +337,12 @@ struct s_object *getObject()
     
     resetXMLstart();
   }
+  
+  p_object->world.scaleCoor.vx = ONE;
+  p_object->world.scaleCoor.vy = ONE;
+  p_object->world.scaleCoor.vz = ONE;
+  
+  p_object->id = sg_id++;
   
   return p_object;
 }

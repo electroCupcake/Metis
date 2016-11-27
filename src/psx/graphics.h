@@ -34,6 +34,7 @@
 //need a method of loading textures to be used in gameObject
 
 void initGraphics(int const width, int const height, int const depth, struct s_environment *p_environment);
+void populateOT();
 void transform();
 void display();
 

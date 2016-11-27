@@ -34,8 +34,9 @@
 
 struct s_primitive
 {
-  void *data;
+  int id;
   enum en_primType type;
+  void *data;
 };
 
 struct s_buffer
@@ -62,8 +63,11 @@ struct s_psx
 struct s_psx g_psx;
 
 //utility functions, all after public functions
+//updateOT with primitives that need to be drawn
+void updateOT(struct s_object *p_object, struct s_svector vector0, struct s_svector vector1, struct s_svector vector2, struct s_svector vector3, long zCoor);
 //clear vram of all contents
 void clearVRAM();
+//swap buffers
 void swapBuffers();
 
 void initGraphics(int const width, int const height, int const depth, struct s_environment *p_environment)
@@ -83,8 +87,6 @@ void initGraphics(int const width, int const height, int const depth, struct s_e
     g_psx.buffer[bufIndex].p_ot->data = NULL;
   }
   
-  clearVRAM();
-  
   // within the BIOS, if the address 0xBFC7FF52 equals 'E', set it as PAL (1). Otherwise, set it as NTSC (0)
   switch(*(char *)0xbfc7ff52=='E')
   {
@@ -95,6 +97,8 @@ void initGraphics(int const width, int const height, int const depth, struct s_e
       SetVideoMode(MODE_NTSC); 
       break;	
   }
+    
+  clearVRAM();
   
   ResetCallback();
   ResetGraph(0);
@@ -131,9 +135,97 @@ void initGraphics(int const width, int const height, int const depth, struct s_e
   SetDispMask(1);
 }
 
+//populateOT via add prim
+void populateOT(struct s_object *p_object)
+{
+  int buffIndex;
+  
+  short width = p_object->local.vector0.vx - p_object->local.vector1.vx;
+  short height = p_object->local.vector0.vy - p_object->local.vector2.vy;
+  
+  g_psx.p_environment->world.local.pp_object[p_object->id] = p_object;
+ 
+  for(buffIndex = 0; buffIndex < DOUBLE_BUF; buffIndex++)
+  {
+    g_psx.buffer[buffIndex].p_primitive[p_object->id].type = p_object->primType;
+    
+    switch(p_object->primType)
+    {
+      case TYPE_SPRITE:
+	g_psx.buffer[buffIndex].p_primitive[p_object->id].data = malloc(sizeof(SPRT));
+	SetSprt((SPRT *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data);
+	setXY0((SPRT *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.vector0.vx, p_object->local.vector0.vy);
+	setWH((SPRT *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, width, height);
+	setUV0((SPRT *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.p_texture->vector0.vx, p_object->local.p_texture->vector0.vy);
+	setRGB0((SPRT *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+	break;
+      case TYPE_TILE:
+	g_psx.buffer[buffIndex].p_primitive[p_object->id].data = malloc(sizeof(TILE));
+	setTile((TILE *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data);
+	setXY0((TILE *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.vector0.vx, p_object->local.vector0.vy);
+	setWH((TILE *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, width, height);
+	setRGB0((TILE *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+	break;
+      case TYPE_F4:
+	g_psx.buffer[buffIndex].p_primitive[p_object->id].data = malloc(sizeof(POLY_F4));
+	SetPolyF4((POLY_F4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data);
+	setXYWH((POLY_F4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data,  p_object->local.vector0.vx, p_object->local.vector0.vy, width, height);
+	setRGB0((POLY_F4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+	break;
+      case TYPE_FT4:
+	g_psx.buffer[buffIndex].p_primitive[p_object->id].data = malloc(sizeof(POLY_FT4));
+	SetPolyFT4((POLY_FT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data);
+	setXYWH((POLY_FT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data,  p_object->local.vector0.vx, p_object->local.vector0.vy, width, height);
+	setUVWH((POLY_FT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.p_texture->vector0.vx, p_object->local.p_texture->vector0.vy, p_object->local.p_texture->dimensions.w, p_object->local.p_texture->dimensions.h);
+	setRGB0((POLY_FT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+	break;
+      case TYPE_G4:
+	g_psx.buffer[buffIndex].p_primitive[p_object->id].data = malloc(sizeof(POLY_G4));
+	SetPolyG4((POLY_G4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data);
+	setXYWH((POLY_G4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data,  p_object->local.vector0.vx, p_object->local.vector0.vy, width, height);
+	setRGB0((POLY_G4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+	setRGB1((POLY_G4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color1.r, p_object->local.color1.g, p_object->local.color1.b);
+	setRGB2((POLY_G4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color2.r, p_object->local.color2.g, p_object->local.color2.b);
+	setRGB3((POLY_G4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color3.r, p_object->local.color3.g, p_object->local.color3.b);
+	break;
+      case TYPE_GT4:
+	g_psx.buffer[buffIndex].p_primitive[p_object->id].data = malloc(sizeof(POLY_GT4));
+	SetPolyGT4((POLY_GT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data);
+	setXYWH((POLY_GT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data,  p_object->local.vector0.vx, p_object->local.vector0.vy, width, height);
+	setUVWH((POLY_GT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.p_texture->vector0.vx, p_object->local.p_texture->vector0.vy, p_object->local.p_texture->dimensions.w, p_object->local.p_texture->dimensions.h);
+	setRGB0((POLY_GT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+	setRGB1((POLY_GT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color1.r, p_object->local.color1.g, p_object->local.color1.b);
+	setRGB2((POLY_GT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color2.r, p_object->local.color2.g, p_object->local.color2.b);
+	setRGB3((POLY_GT4 *)g_psx.buffer[buffIndex].p_primitive[p_object->id].data, p_object->local.color3.r, p_object->local.color3.g, p_object->local.color3.b);
+	break;
+      default:
+	printf("\nERROR, NO TYPE DEFINED AT INDEX %d\n", p_object->id);
+	break;
+    }
+    
+    AddPrim(&(g_psx.buffer[buffIndex].p_ot[p_object->id]), g_psx.buffer[buffIndex].p_primitive[p_object->id].data);
+  }
+}
+
 void transform()
 {
+  int index;
+  long zCoor;
+  
+  struct s_svector vector0;
+  struct s_svector vector1;
+  struct s_svector vector2;
+  struct s_svector vector3;
+  
+  ClearOTag(g_psx.p_currBuffer.p_ot, g_psx.depth);
+  
+  for(index = 0; index < g_psx.p_environment->numObjects; index++)
+  {
   //calculation from local to world to screen for each object done here
+  //then set it to the current matrix
+  //then update the ordering table with the ones needed to be drawn
+    updateOT(g_psx.p_environment->world.local.pp_objects[index], vector0, vector1, vector2, vector3);
+  }
 }
 
 void display()
@@ -142,7 +234,9 @@ void display()
   
   Vsync(0);
   
-  FntFlush(-1);
+  #ifdef DEBUG
+    FntFlush(-1);
+  #endif
   
   PutDrawEnv(&g_psx.p_currBuffer->draw);
   PutDispEnv(&g_psx.p_currBuffer->disp);
@@ -154,6 +248,69 @@ void display()
   #ifdef DEBUG
     FntPrint("%s\n%s\n%X", g_psx.p_environment->message.p_title, g_psx.p_environment->message.p_message, g_psx.p_environment->p_data);
   #endif
+}
+
+//utility functions
+void updateOT(struct s_object *p_object, struct s_svector vector0, struct s_svector vector1, struct s_svector vector2, struct s_svector vector3, long zCoor)
+{
+  short width = vector0.vx - vector1.vx;
+  short height = vector0.vy - vector2.vy;
+  
+  switch(p_object->type)
+  {
+    case TYPE_SPRITE:
+      setXY0((SPRT *)g_psx.currBuffer.p_primitive[p_object->id].data, vector0.vx, vector0.vy);
+      setWH((SPRT *)g_psx.currBuffer.p_primitive[p_object->id].data, width, height);
+      setUV0((SPRT *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.p_texture->vector0.vx, p_object->local.p_texture->vector0.vy);
+      setRGB0((SPRT *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+      break;
+    case TYPE_TILE:
+      setXY0((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector0.vx, vector0.vy);
+      setWH((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, width, height);
+      setRGB0((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+      break;
+    case TYPE_F4:
+      setXY0((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector0.vx, vector0.vy);
+      setXY1((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector1.vx, vector1.vy);
+      setXY2((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector2.vx, vector2.vy);
+      setXY3((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector3.vx, vector3.vy);
+      setRGB0((POLY_F4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+      break;
+    case TYPE_FT4:
+      setXY0((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector0.vx, vector0.vy);
+      setXY1((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector1.vx, vector1.vy);
+      setXY2((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector2.vx, vector2.vy);
+      setXY3((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector3.vx, vector3.vy);
+      setUVWH((POLY_FT4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.p_texture->vector0.vx, p_object->local.p_texture->vector0.vy, p_object->local.p_texture->dimensions.w, p_object->local.p_texture->dimensions.h);
+      setRGB0((POLY_FT4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+      break;
+    case TYPE_G4:
+      setXY0((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector0.vx, vector0.vy);
+      setXY1((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector1.vx, vector1.vy);
+      setXY2((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector2.vx, vector2.vy);
+      setXY3((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector3.vx, vector3.vy);
+      setRGB0((POLY_G4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+      setRGB1((POLY_G4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color1.r, p_object->local.color1.g, p_object->local.color1.b);
+      setRGB2((POLY_G4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color2.r, p_object->local.color2.g, p_object->local.color2.b);
+      setRGB3((POLY_G4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color3.r, p_object->local.color3.g, p_object->local.color3.b);
+      break;
+    case TYPE_GT4:
+      setXY0((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector0.vx, vector0.vy);
+      setXY1((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector1.vx, vector1.vy);
+      setXY2((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector2.vx, vector2.vy);
+      setXY3((TILE *)g_psx.currBuffer.p_primitive[p_object->id].data, vector3.vx, vector3.vy);
+      setUVWH((POLY_GT4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.p_texture->vector0.vx, p_object->local.p_texture->vector0.vy, p_object->local.p_texture->dimensions.w, p_object->local.p_texture->dimensions.h);
+      setRGB0((POLY_GT4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b);
+      setRGB1((POLY_GT4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color1.r, p_object->local.color1.g, p_object->local.color1.b);
+      setRGB2((POLY_GT4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color2.r, p_object->local.color2.g, p_object->local.color2.b);
+      setRGB3((POLY_GT4 *)g_psx.currBuffer.p_primitive[p_object->id].data, p_object->local.color3.r, p_object->local.color3.g, p_object->local.color3.b);
+      break;
+    default:
+      printf("\nUnknown Type for update at index %d %d\n", index, g_psx.currBuffer.p_primitive[p_object->id].type);
+      break;
+  }
+  
+  AddPrim(&(g_psx.currBuffer.p_ot[p_object->id]), g_psx.currBuffer.p_primitive[p_object->id].data);
 }
 
 void clearVRAM()
