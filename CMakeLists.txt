@@ -10,14 +10,6 @@ include_directories(include)
 #add global sources
 file(GLOB SOURCES "src/*.c")
 
-<<<<<<< HEAD
-#set global exe name
-set(MAIN "MAIN")
-
-project(${MAIN})
-
-=======
->>>>>>> fcb076a8dde0c231276c0d56707da96a3dfcc10d
 #include sources that are platform specific
 if(PSX)
   message(STATUS "PSX BUILD")
