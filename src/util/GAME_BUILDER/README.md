@@ -11,4 +11,4 @@ worlds (levels) included, process those worlds, then process the objects in
 those worlds. 
 
 ## Future
-* Impliment the idea
+* Implement
