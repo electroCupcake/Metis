@@ -230,10 +230,10 @@ char *getStringBuf()
   return g_parserData.stringBuffer;
 }
 
-//find short vector data, helps since this needs to happen 4 or more times
-int findSVector(struct s_svector *p_vector, char const * const p_vectorName)
+//find short vertex data, helps since this needs to happen 4 or more times
+int findSVertex(struct s_svertex *p_vertex, char const * const p_vertexName)
 {
-  if(findXMLblock(p_vectorName) < 0)
+  if(findXMLblock(p_vertexName) < 0)
   {
     resetXMLstart();
     return PROCESS_FAILURE;
@@ -247,7 +247,7 @@ int findSVector(struct s_svector *p_vector, char const * const p_vectorName)
     return PROCESS_FAILURE;
   }
   
-  p_vector->vx = atoi(g_parserData.stringBuffer);
+  p_vertex->vx = atoi(g_parserData.stringBuffer);
   
   resetXMLblock();
   
@@ -257,17 +257,17 @@ int findSVector(struct s_svector *p_vector, char const * const p_vectorName)
     return PROCESS_FAILURE;
   }
   
-  p_vector->vy = atoi(g_parserData.stringBuffer);
+  p_vertex->vy = atoi(g_parserData.stringBuffer);
   
   resetXMLblock();
   
   if(findXMLelem(XML_Z_CORR) < 0)
   {
-    p_vector->vz = 0; 
+    p_vertex->vz = 0; 
   }
   else
   {
-    p_vector->vz = atoi(g_parserData.stringBuffer);
+    p_vertex->vz = atoi(g_parserData.stringBuffer);
   }
   
   resetXMLblock();
@@ -275,10 +275,10 @@ int findSVector(struct s_svector *p_vector, char const * const p_vectorName)
   return PROCESS_SUCCESS;
 }
 
-//find long vector data, helps since this needs to happen 4 or more times
-int findLVector(struct s_lvector *p_vector, char const * const p_vectorName)
+//find long vertex data, helps since this needs to happen 4 or more times
+int findLVertex(struct s_lvertex *p_vertex, char const * const p_vertexName)
 {
-  if(findXMLblock(p_vectorName) < 0)
+  if(findXMLblock(p_vertexName) < 0)
   {
     resetXMLstart();
     return PROCESS_FAILURE;
@@ -292,7 +292,7 @@ int findLVector(struct s_lvector *p_vector, char const * const p_vectorName)
     return PROCESS_FAILURE;
   }
   
-  p_vector->vx = atoi(g_parserData.stringBuffer);
+  p_vertex->vx = atoi(g_parserData.stringBuffer);
   
   resetXMLblock();
   
@@ -302,7 +302,7 @@ int findLVector(struct s_lvector *p_vector, char const * const p_vectorName)
     return PROCESS_FAILURE;
   }
   
-  p_vector->vy = atoi(g_parserData.stringBuffer);
+  p_vertex->vy = atoi(g_parserData.stringBuffer);
   
   resetXMLblock();
   
@@ -312,7 +312,7 @@ int findLVector(struct s_lvector *p_vector, char const * const p_vectorName)
     return PROCESS_FAILURE;
   }
 
-  p_vector->vz = atoi(g_parserData.stringBuffer);
+  p_vertex->vz = atoi(g_parserData.stringBuffer);
 
   resetXMLblock();
   

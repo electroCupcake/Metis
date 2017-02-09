@@ -33,11 +33,11 @@
 //defines of names for xmltypes
 #define XML_TYPE_NAME "primtype"
 #define XML_TYPE_OBJ  "objecttype"
-#define XML_VECTOR_0  "vector0"
-#define XML_VECTOR_1  "vector1"
-#define XML_VECTOR_2  "vector2"
-#define XML_VECTOR_3  "vector3"
-#define XML_VRAM      "vramVector"
+#define XML_VERTEX_0  "vertex0"
+#define XML_VERTEX_1  "vertex1"
+#define XML_VERTEX_2  "vertex2"
+#define XML_VERTEX_3  "vertex3"
+#define XML_VRAM      "vramVertex"
 #define XML_COLOR_0   "color0"
 #define XML_COLOR_1   "color1"
 #define XML_COLOR_2   "color2"
@@ -134,7 +134,7 @@ struct s_object *getObject(char const *p_objectData)
   {
     setXMLblock();
     
-    returnValue = findSVector(&p_object->local.vector0, XML_VECTOR_0);
+    returnValue = findSVertex(&p_object->local.vertex0, XML_VERTEX_0);
     
     if(returnValue < 0)
     {
@@ -145,11 +145,11 @@ struct s_object *getObject(char const *p_objectData)
       return NULL;
     }
     
-    findSVector(&p_object->local.vector1, XML_VECTOR_1);
+    findSVertex(&p_object->local.vertex1, XML_VERTEX_1);
 
-    findSVector(&p_object->local.vector2, XML_VECTOR_2);
+    findSVertex(&p_object->local.vertex2, XML_VERTEX_2);
     
-    findSVector(&p_object->local.vector3, XML_VECTOR_3);
+    findSVertex(&p_object->local.vertex3, XML_VERTEX_3);
     
     returnValue = findColor(&p_object->local.color0, XML_COLOR_0);
     
@@ -182,7 +182,7 @@ struct s_object *getObject(char const *p_objectData)
 	return NULL;
       }
       
-      returnValue = findSVector(&p_object->local.p_texture->vector0, XML_VECTOR_0);
+      returnValue = findSVertex(&p_object->local.p_texture->vertex0, XML_VERTEX_0);
       
       if(returnValue < 0)
       {
@@ -193,7 +193,7 @@ struct s_object *getObject(char const *p_objectData)
 	return NULL;
       }
       
-      returnValue = findSVector(&p_object->local.p_texture->vramVector, XML_VRAM);
+      returnValue = findSVertex(&p_object->local.p_texture->vramVertex, XML_VRAM);
       
       if(returnValue < 0)
       {
@@ -231,7 +231,7 @@ struct s_object *getObject(char const *p_objectData)
   {
     setXMLblock();
     
-    returnValue = findLVector(&p_object->world.transCoor, XML_VECTOR_0);
+    returnValue = findLVertex(&p_object->world.transCoor, XML_VERTEX_0);
     
     if(returnValue < 0)
     {

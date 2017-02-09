@@ -86,7 +86,7 @@ struct s_xmlData
   char string[256];
 };
 
-struct s_svector
+struct s_svertex
 {
   int16_t vx;
   int16_t vy;
@@ -94,7 +94,7 @@ struct s_svector
   int16_t pad;
 };
 
-struct s_lvector
+struct s_lvertex
 {
   int32_t vx;
   int32_t vy;
@@ -134,8 +134,8 @@ struct s_texture
   
   char file[256];
   
-  struct s_svector vector0;
-  struct s_svector vramVector;
+  struct s_svertex vertex0;
+  struct s_svertex vramVertex;
   struct s_dimensions dimensions;
   struct s_tpage tpage;
   
@@ -144,10 +144,10 @@ struct s_texture
 
 struct s_translation
 {  
-  struct s_lvector transCoor;
-  struct s_lvector scaleCoor;
+  struct s_lvertex transCoor;
+  struct s_lvertex scaleCoor;
   
-  struct s_svector rotCoor;
+  struct s_svertex rotCoor;
   
   struct s_matrix matrix;
 };
@@ -160,10 +160,10 @@ struct s_object
   
   struct
   {
-    struct s_svector vector0;
-    struct s_svector vector1;
-    struct s_svector vector2;
-    struct s_svector vector3;
+    struct s_svertex vertex0;
+    struct s_svertex vertex1;
+    struct s_svertex vertex2;
+    struct s_svertex vertex3;
     
     struct s_color color0;
     struct s_color color1;

@@ -45,11 +45,11 @@ int main()
       printf("\n\nprimType: %d\n", p_object->primType);
       printf("objectType: %d\n", p_object->objectType);
       printf("\nLOCAL\n");
-      printf("\n       VECTOR 0: %d %d %d VECTOR 1: %d %d %d VECTOR 2: %d %d %d VECTOR 3: %d %d %d\n"
-	, p_object->local.vector0.vx, p_object->local.vector0.vy, p_object->local.vector0.vz
-	, p_object->local.vector1.vx, p_object->local.vector1.vy, p_object->local.vector1.vz
-	, p_object->local.vector2.vx, p_object->local.vector2.vy, p_object->local.vector2.vz
-	, p_object->local.vector3.vx, p_object->local.vector3.vy, p_object->local.vector3.vz
+      printf("\n       VERTEX 0: %d %d %d VERTEX 1: %d %d %d VERTEX 2: %d %d %d VERTEX 3: %d %d %d\n"
+	, p_object->local.vertex0.vx, p_object->local.vertex0.vy, p_object->local.vertex0.vz
+	, p_object->local.vertex1.vx, p_object->local.vertex1.vy, p_object->local.vertex1.vz
+	, p_object->local.vertex2.vx, p_object->local.vertex2.vy, p_object->local.vertex2.vz
+	, p_object->local.vertex3.vx, p_object->local.vertex3.vy, p_object->local.vertex3.vz
       );
       printf("\n       COLOR  0: %d %d %d COLOR  1: %d %d %d COLOR  2: %d %d %d COLOR  3: %d %d %d\n"
 	, p_object->local.color0.r, p_object->local.color0.g, p_object->local.color0.b
@@ -58,10 +58,10 @@ int main()
 	, p_object->local.color3.r, p_object->local.color3.g, p_object->local.color3.b
       );
       printf("\nTEXTURE\n");
-      printf("\n       ID: %d SIZE: %d VECTOR 0: %d %d %d VRAM: %d %d %d DIMENSIONS: %d %d FILE %s\n"
+      printf("\n       ID: %d SIZE: %d VERTEX 0: %d %d %d VRAM: %d %d %d DIMENSIONS: %d %d FILE %s\n"
 	, p_object->local.p_texture->id, p_object->local.p_texture->size
-	, p_object->local.p_texture->vector0.vx, p_object->local.p_texture->vector0.vz, p_object->local.p_texture->vector0.vy
-	, p_object->local.p_texture->vramVector.vx, p_object->local.p_texture->vramVector.vy, p_object->local.p_texture->vramVector.vz
+	, p_object->local.p_texture->vertex0.vx, p_object->local.p_texture->vertex0.vz, p_object->local.p_texture->vertex0.vy
+	, p_object->local.p_texture->vramVertex.vx, p_object->local.p_texture->vramVertex.vy, p_object->local.p_texture->vramVertex.vz
 	, p_object->local.p_texture->dimensions.w, p_object->local.p_texture->dimensions.h
 	, p_object->local.p_texture->file
       );

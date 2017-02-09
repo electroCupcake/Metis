@@ -51,10 +51,10 @@ int findXMLblock(char const * const p_block);
 int getXMLcontent();
 //get string buffer contents
 char *getStringBuf();
-//finds short vector data out of the xml, 0 if found, -1 if not found
-int findSVector(struct s_svector *p_vector, char const * const p_vectorName);
-//finds long vector data out of the xml, 0 if found, -1 if not found
-int findLVector(struct s_lvector *p_vector, char const * const p_vectorName);
+//finds short vertex data out of the xml, 0 if found, -1 if not found
+int findSVertex(struct s_svertex *p_vertex, char const * const p_vertexName);
+//finds long vertex data out of the xml, 0 if found, -1 if not found
+int findLVertex(struct s_lvertex *p_vertex, char const * const p_vertexName);
 //finds color data out of the xml, 0 if found, -1 if not found
 int findColor(struct s_color *color, char const * const p_colorName);
 //sets the current block data pointer so we can loop within the same block of data
