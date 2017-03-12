@@ -31,11 +31,12 @@
 
 #include "types.h"
 
-//use this to setup xml, but if your using the object builder only call one or the other init
+//use this to setup game builder
 void initGameBuilder();
 
 //parse the data
 void buildGame(char const *p_gameData);
 
-
+//free game
+void freeGame(char *pp_gameData);
 #endif 

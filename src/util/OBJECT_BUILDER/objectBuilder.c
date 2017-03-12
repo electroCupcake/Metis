@@ -33,6 +33,7 @@
 //defines of names for xmltypes
 #define XML_TYPE_NAME "primtype"
 #define XML_TYPE_OBJ  "objecttype"
+#define XML_TYPE_ID   "objectid"
 #define XML_VERTEX_0  "vertex0"
 #define XML_VERTEX_1  "vertex1"
 #define XML_VERTEX_2  "vertex2"
@@ -46,7 +47,7 @@
 #define XML_HEIGHT    "height"
 #define XML_TEXTURE   "texture"
 #define XML_LOCAL     "local"
-#define XML_WORLD     "world"
+// #define XML_WORLD     "world"
 #define XML_FILE      "file"
 
 static int sg_id = 0;
@@ -129,6 +130,17 @@ struct s_object *getObject(char const *p_objectData)
       break;
     }
   }
+  
+  if(findXMLattr(XML_TYPE_ID) < 0)
+  {
+    #ifdef DEBUG
+      printf("\nDID NOT FIND OBJECT ID\n");
+    #endif
+    free(p_object);
+    return NULL;
+  }
+  
+  strcpy(p_object->objectID, getStringBuf());
   
   if(findXMLblock(XML_LOCAL) == 0)
   {
@@ -227,23 +239,23 @@ struct s_object *getObject(char const *p_objectData)
     return NULL;
   }
   
-  if(findXMLblock(XML_WORLD) == 0)
-  {
-    setXMLblock();
-    
-    returnValue = findLVertex(&p_object->world.transCoor, XML_VERTEX_0);
-    
-    if(returnValue < 0)
-    {
-      #ifdef DEBUG
-	printf("\nCOULD NOT FIND VECTOR 0\n");
-      #endif
-      free(p_object);
-      return NULL;
-    }
-    
-    resetXMLstart();
-  }
+//   if(findXMLblock(XML_WORLD) == 0)
+//   {
+//     setXMLblock();
+//     
+//     returnValue = findLVertex(&p_object->world.transCoor, XML_VERTEX_0);
+//     
+//     if(returnValue < 0)
+//     {
+//       #ifdef DEBUG
+// 	printf("\nCOULD NOT FIND VECTOR 0\n");
+//       #endif
+//       free(p_object);
+//       return NULL;
+//     }
+//     
+//     resetXMLstart();
+//   }
   
   p_object->id = sg_id++;
   

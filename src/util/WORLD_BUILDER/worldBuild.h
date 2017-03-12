@@ -31,11 +31,14 @@
 
 #include "types.h"
 
-//use this to setup xml, but if your using the object builder only call one or the other init
+//use this to setup world builder
 void initWorldBuilder();
 
 //parse the data
 void buildWorld(char const *p_worldData);
+
+//destroy the world
+void freeWorld(char **pp_worldData);
 
 
 #endif 

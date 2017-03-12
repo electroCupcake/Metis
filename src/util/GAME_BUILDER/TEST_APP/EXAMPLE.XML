@@ -1,0 +1,12 @@
+<MAIN_GAME>
+  <WORLD_1 worldid="HELL">
+    <level>1</level>
+    <prev>0</prev>
+    <next>2</next>
+  </WORLD_1>
+  <WORLD_2 worldid="HEAVEN">
+    <level>2</level>
+    <prev>1</prev>
+    <next>3</next>
+  </WORLD_2>
+</MAIN_GAME>

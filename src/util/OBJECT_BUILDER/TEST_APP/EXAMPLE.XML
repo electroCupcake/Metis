@@ -1,4 +1,4 @@
-<ACTOR_PRIM primtype="TYPE_SPRITE" objecttype="PLAYER">
+<ACTOR_PRIM primtype="TYPE_SPRITE" objecttype="PLAYER" objectid="HERO">
   <local>
     <vertex0>
       <x>-25</x>
@@ -54,12 +54,4 @@
       <file>\\SPRITE.BMP;1</file>
     </texture>
   </local>
-  
-  <world>
-    <vertex0>
-      <x>130</x>
-      <y>100</y>
-      <z>1024</z>
-    </vertex0>
-  </world>
 </ACTOR_PRIM>

@@ -41,6 +41,7 @@
 //holds data relating to xml parsing
 struct
 {
+  char initRun;
   int bufSize;
   char stringBuffer[256];
   
@@ -53,9 +54,12 @@ struct
   
 } g_parserData;
 
+g_parserData.initRun = 0;
 //setup get prim data
 void initBuildUtil()
 {
+  if(g_parserData.initRun == 1) return;
+  
   g_parserData.p_xmlData = NULL;
   g_parserData.p_xmlDataStart = NULL;
   
@@ -64,6 +68,8 @@ void initBuildUtil()
   memset(g_parserData.stringBuffer, 0, 256);
   
   yxml_init(&g_parserData.yxml, g_parserData.p_stack, g_parserData.bufSize);
+  
+  g_parserData.initRun = 1;
 }
 
 //reset get prim

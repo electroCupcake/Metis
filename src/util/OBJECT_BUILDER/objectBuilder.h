@@ -31,7 +31,7 @@
 
 #include "types.h"
 
-//use this to setup xml, but if your using the world builder only call one or the other init
+//use this to setup object builder
 void initObjectBuilder();
 
 //parse the data

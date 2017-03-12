@@ -40,3 +40,9 @@ void buildWorld(char const *p_worldData)
 {
   return;
 }
+
+//destroy the world
+void freeWorld(char **pp_worldData)
+{
+  return;
+}

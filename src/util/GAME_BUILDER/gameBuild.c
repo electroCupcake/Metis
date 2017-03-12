@@ -40,3 +40,8 @@ void buildGame(char const *p_gameData)
 {
   return;
 }
+
+void freeGame(char *pp_gameData)
+{
+  return;
+}
